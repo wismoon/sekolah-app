@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "383630810032",
+    "project_id": "sekolah-app-657d7",
+    "storage_bucket": "sekolah-app-657d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383630810032:android:140452c2ebb44627429475",
+        "android_client_info": {
+          "package_name": "com.wismoon.sekolah_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBysrDKlAwESvJe8s40KpaR8nTWFAhO378"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
