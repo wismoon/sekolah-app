@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/models/periode_pembayaran_model.dart';
+import 'package:sekolah_app/app/modules/pembayaran/controllers/jenis_pembayaran_controller.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/periode_pembayaran_controller.dart';
 
 class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
   const AddPeriodePembayaranView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+
+    final jenisPembayaranController = Get.put(JenisPembayaranController());
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('AddPeriodePembayaranView'),
@@ -29,37 +34,47 @@ class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
               ),
             ),
             const SizedBox(height: 20),
-            Obx(
-              () => DropdownButtonFormField<String>(
+            Obx(() {
+              if (jenisPembayaranController.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return DropdownButtonFormField<String>(
+                value: controller.selectedJenis.value.isEmpty
+                    ? null
+                    : controller.selectedJenis.value,
+                items: jenisPembayaranController.jenisPembayaranList.map((jenis) {
+                  return DropdownMenuItem<String>(
+                    value: jenis.nama,
+                    child: Text(jenis.nama!),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.selectedJenis(value);
+                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(
+                    borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
                   ),
                   labelText: 'Jenis Pembayaran',
                 ),
-                value: controller.selectedJenisPembayaran.value.isEmpty
-                    ? null
-                    : controller.selectedJenisPembayaran.value,
-                items: controller.jenisPembayaranList.map((String jenis) {
-                  return DropdownMenuItem<String>(
-                    value: jenis,
-                    child: Text(jenis),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  controller.selectedJenisPembayaran.value = newValue ?? '';
-                },
-              ),
-            ),
+              );
+            }),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                print('Name: ${controller.namePeriode.text}');
-              },
+              onPressed: controller.isBusy.value
+                  ? null
+                  : () {
+                      PeriodePembayaran periodePembayaran = PeriodePembayaran(
+                        nama: controller.namePeriode.text,
+                        jenis: [controller.selectedJenis.value],
+                      );
+                      controller.createPeriodePembayaran(periodePembayaran);
+                      Navigator.pop(context);
+                    },
               child: Text('Submit'),
             ),
           ]

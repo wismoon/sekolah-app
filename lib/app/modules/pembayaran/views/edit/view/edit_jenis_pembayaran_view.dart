@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:sekolah_app/app/models/jenis_pembayaran_model.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/jenis_pembayaran_controller.dart';
 
-class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
-  const AddJenisPembayaranView({Key? key}) : super(key: key);
-
+class EditJenisPembayaranView extends GetView<JenisPembayaranController> {
   @override
   Widget build(BuildContext context) {
+
+    final arguments = Get.arguments;
+    
+    controller.nameJenis.text = arguments['nama'];
+    controller.nameJenis.text = arguments['nama'];
+    controller.kodeJenis.text = arguments['kode'];
+    controller.selectedValue.value = arguments['pembayaran'];
+    controller.commentJenis.text = arguments['keterangan']; 
+
     return Scaffold(
         appBar: AppBar(
-          title: const Text('AddJenisPembayaranView'),
+          title: const Text('EditJenisPembayaranView'),
           centerTitle: true,
         ),
-        body: ListView(
+        body: Obx(() => ListView(
           padding: EdgeInsets.all(20),
           children: [
             TextField(
@@ -102,62 +108,58 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: controller.isBusy.value
-                  ? null
-                  : () {
-                      JenisPembayaran jenisPembayaran = JenisPembayaran(
-                        nama: controller.nameJenis.text,
-                        kode: controller.kodeJenis.text,
-                        pembayaran: controller
-                            .selectedValue.value, // REGULAR or NON REGULAR
-                        keterangan: controller.commentJenis.text,
-                      );
-                      controller.createJenisPembayaran(jenisPembayaran);
-                      Navigator.pop(context);
-                    },
+              onPressed: () {
+                try {
+                  controller.updateJenisPembayaran(arguments['id'], arguments['id_akun']); // Pass the ID to the update method
+                  Get.back();
+                } catch (e) {
+                  Get.snackbar('Error', 'Failed to update jenis pembayaran: $e');
+                }
+              },
               child: Text(
-                      controller.isLoading.isFalse ? "Tambah" : "Loading")
+                      controller.isLoading.isFalse ? "Update" : "Loading")
             ),
           ],
-        ));
+        ))
+        );
   }
+}
 
-  Widget _buildRadioButton({
-    required String label,
-    required String value,
-    required String groupValue,
-    required ValueChanged<String> onChanged,
-  }) {
-    return GestureDetector(
-        onTap: () {
-          if (groupValue != value) {
-            onChanged(value);
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: groupValue == value ? Colors.blue : Colors.grey,
-              width: 2.0,
+Widget _buildRadioButton({
+  required String label,
+  required String value,
+  required String groupValue,
+  required ValueChanged<String> onChanged,
+}) {
+  return GestureDetector(
+      onTap: () {
+        if (groupValue != value) {
+          onChanged(value);
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: groupValue == value ? Colors.blue : Colors.grey,
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        margin: EdgeInsets.all(4.0),
+        child: Row(
+          children: [
+            Radio<String>(
+              value: value,
+              groupValue: groupValue,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  onChanged(newValue);
+                }
+              },
             ),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: EdgeInsets.all(4.0),
-          child: Row(
-            children: [
-              Radio<String>(
-                value: value,
-                groupValue: groupValue,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    onChanged(newValue);
-                  }
-                },
-              ),
-              Text(label),
-            ],
-          ),
-        ));
-  }
+            Text(label),
+          ],
+        ),
+      ));
 }

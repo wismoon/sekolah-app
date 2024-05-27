@@ -1,27 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:sekolah_app/app/models/jenis_pembayaran_model.dart';
+import 'package:sekolah_app/app/routes/app_pages.dart';
+import 'package:sekolah_app/app/services/jenis_pembayaran_service.dart';
+
 class JenisPembayaranController extends GetxController {
-  var selectedValue = 'REGULAR'.obs;
+  var selectedValue = ''.obs;
   var nameJenis = TextEditingController();
   var kodeJenis = TextEditingController();
   var commentJenis = TextEditingController();
 
-  // var pembayaranList = <JenisPembayaran>[].obs;
-  final List<Map<String, String>> pembayaranList = [
-    {"no": "1", "kode": "12", "nama": "SPP", "jenis": "Regular"},
-    {"no": "2", "kode": "13", "nama": "SPP", "jenis": "Regularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"},
-    {"no": "3", "kode": "14", "nama": "SPP", "jenis": "Regular"},
-  ];
+  final JenisPembayaranService _service = JenisPembayaranService();
+  var jenisPembayaranList = <JenisPembayaran>[].obs;
 
   var isBusy = false.obs;
   var isLoading = false.obs;
 
-  void setSelected(String value) {
-    selectedValue.value = value;
+  @override
+  void onInit() {
+    final arguments = Get.arguments;
+    if (arguments != null) {
+      nameJenis.text = arguments['nama'] ?? '';
+      kodeJenis.text = arguments['kode'] ?? '';
+      selectedValue.value = arguments['pembayaran'] ?? '';
+      commentJenis.text = arguments['keterangan'] ?? '';
+    }
+    fetchJenisPembayaran();
+    super.onInit();
   }
 
   @override
@@ -31,102 +39,102 @@ class JenisPembayaranController extends GetxController {
     commentJenis.dispose();
     super.onClose();
   }
-  void onInit() {
-    fetchPembayaranList();
-    super.onInit();
-  }
 
-  Future<void> createJenisPembayaran() async {
-    isBusy.value = true;
-    final url = Uri.parse('http://192.168.1.11:3350/api/transaksi/jenisPembayaran');
-    final body = jsonEncode({
-      'nama': nameJenis.text,
-      'kode': kodeJenis.text,
-      'pembayaran': selectedValue.value,
-      'keterangan': commentJenis.text,
-    });
-
+  void fetchJenisPembayaran() async {
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer client-q6WtLyxA8xNsZls9',
-          },
-        body: body,
-      );
-
-      isBusy.value = false;
-
-      if (response.statusCode == 201) {
-        Get.snackbar('Success', 'Data has been created successfully');
-        nameJenis.clear();
-        kodeJenis.clear();
-        commentJenis.clear();
-        selectedValue.value = 'REGULAR';
-        // Call method to refresh data if needed
-        // await refreshDataPembayaran();
+      isLoading(true);
+      var jenisPembayaran = await _service.fetchJenisPembayaran();
+      if (jenisPembayaran.isEmpty) {
+        Get.snackbar('Data Error', 'Failed to load data because is Empty');
       } else {
-        Get.snackbar('Error', 'Failed to create data');
-      }
-    } catch (e) {
-      isBusy.value = false;
-      Get.snackbar('Error', 'An error occurred: $e');
-    }
-  }
-  
-  void fetchPembayaranList() async {
-    isLoading.value = true;
-
-    final url = Uri.parse('http://192.168.1.11:3350/api/transaksi/listJenisPembayaran');
-
-     try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer client-q6WtLyxA8xNsZls9',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
-        if (data.isEmpty) {
-          Get.snackbar('Data Error', 'Failed to load data because is Empty');
-        }else {
-          // pembayaranList.value = List<JenisPembayaran>.from(data.map((item) => JenisPembayaran.fromJson(item)));
-        }
-      } else {
-        Get.snackbar('Error', 'Failed to load data');
+        jenisPembayaranList.value = jenisPembayaran;
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 
-  void showBottomSheet(BuildContext context, Map<String, String> pembayaran) {
+  void updateJenisPembayaran(int id, String? id_akun) async {
+    try {
+      isBusy(true);
+       print('Updating jenis pembayaran with ID: $id and id_akun: $id_akun');
+      JenisPembayaran jenisPembayaran = JenisPembayaran(
+        id: id,
+        id_akun: id_akun,
+        kode: kodeJenis.text,
+        nama: nameJenis.text,
+        pembayaran: selectedValue.value,
+        keterangan: commentJenis.text,
+      );
+
+      print('Data being sent for update: ${jsonEncode(jenisPembayaran.toJson())}');
+      await _service.updateJenisPembayaran(jenisPembayaran, id_akun);
+      
+      Get.snackbar('Success', 'Jenis Pembayaran updated successfully');
+    } catch (e) {
+      print('Error updating jenis pembayaran: $e');
+      Get.snackbar('Error', 'Failed to update data: $e');
+    } finally {
+      isBusy(false);
+    }
+      fetchJenisPembayaran();
+  }
+
+  void createJenisPembayaran(JenisPembayaran jenisPembayaran) async {
+    isBusy.value = true;
+    try {
+      await _service.createJenisPembayaran(jenisPembayaran);
+      print('Jenis Pembayaran created successfully');
+      Get.snackbar('Success', 'Jenis Pembayaran created successfully');
+      nameJenis.clear();
+      kodeJenis.clear();
+      commentJenis.clear();
+      selectedValue.value;
+    } catch (e) {
+      print('Error: $e');
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isBusy.value = false;
+    }
+    fetchJenisPembayaran();
+  }
+
+  void deleteJenisPembayaran(int id) async {
+    isBusy(true);
+    try {
+      await _service.deleteJenisPembayaran(id);
+      Get.snackbar('Success', 'Jenis Pembayaran deleted successfully');
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isBusy(false);
+    }
+    fetchJenisPembayaran();
+  }
+
+  void showBottomSheet(BuildContext context, JenisPembayaran pembayaran) async {
     showModalBottomSheet(
       context: context,
-     isScrollControlled: true, // This is necessary for custom height
+      isScrollControlled: true, // This is necessary for custom height
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.5, // Adjust the height factor to make it half of the screen height
+          heightFactor:
+              0.5, // Adjust the height factor to make it half of the screen height
           child: Container(
             padding: const EdgeInsets.all(16.0),
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Text('No: ${pembayaran.id}', style: TextStyle(fontSize: 20)),
-                // Text('Kode: ${pembayaran.kode}', style: TextStyle(fontSize: 20)),
-                // Text('Nama Pembayaran: ${pembayaran.nama}', style: TextStyle(fontSize: 20)),
-                // Text('Jenis Pembayaran: ${pembayaran.pembayaran}', style: TextStyle(fontSize: 20)),
-                Text('No: ${pembayaran["no"]}', style: TextStyle(fontSize: 20)),
-                Text('Kode: ${pembayaran["kode"]}', style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran["nama"]}', style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran["jenis"]}', style: TextStyle(fontSize: 20)),
+                Text('No: ${pembayaran.id}', style: TextStyle(fontSize: 20)),
+                Text('Kode: ${pembayaran.kode}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Nama Pembayaran: ${pembayaran.nama}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Jenis Pembayaran: ${pembayaran.pembayaran}',
+                    style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 20),
                 Spacer(), // Push the buttons to the bottom
                 Row(
@@ -134,21 +142,33 @@ class JenisPembayaranController extends GetxController {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Handle edit action here
-                        Navigator.pop(context);
-                        
+                        try {
+                          Navigator.pop(context);
+                          Get.toNamed(
+                            Routes.EDIT_Jenis_PEMBAYARAN,
+                            arguments: {
+                              'id': pembayaran.id,
+                              'id_akun': pembayaran.id_akun,
+                              'kode': pembayaran.kode,
+                              'nama': pembayaran.nama,
+                              'pembayaran': pembayaran.pembayaran,
+                              'keterangan': pembayaran.keterangan
+                            },
+                          );
+                        } catch (e) {
+                          Get.snackbar('Error', 'Failed to load data: $e');
+                        }
                       },
                       child: const Text('Edit'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle delete action here
+                        deleteJenisPembayaran(pembayaran.id!);
                         Navigator.pop(context);
-                        // Add your delete logic here
                       },
                       child: const Text('Delete'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red, // Set the delete button color to red
+                        backgroundColor: Colors.red,
                       ),
                     ),
                   ],
@@ -160,5 +180,4 @@ class JenisPembayaranController extends GetxController {
       },
     );
   }
-
 }

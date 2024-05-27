@@ -1,0 +1,10 @@
+{
+    "id": 1,
+    "nama": "Semester 2021/2022 GENAP",
+    "jenis": [
+        "Semester"
+    ],
+    "created_at": "2022-06-01 16:28:03.000",
+    "updated_at": "2022-06-01T16:39:33.827+07:00",
+    "deleted_at": null
+}

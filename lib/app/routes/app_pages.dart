@@ -1,21 +1,29 @@
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_individu_view.dart';
+import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_kelompok_view.dart';
 
 import '../modules/authUsers/bindings/auth_users_binding.dart';
 import '../modules/authUsers/views/auth_users_view.dart';
-import '../modules/home/bindings/home_binding.dart';
-import '../modules/home/views/home_view.dart';
 import '../modules/authUsers/views/login_view.dart';
-import '../modules/pembayaran/bindings/pembayaran_binding.dart';
-import '../modules/pembayaran/views/biaya_pembayaran_view.dart';
-import '../modules/pembayaran/views/create/views/add_biaya_pembayaran_view.dart';
-import '../modules/pembayaran/views/create/views/add_jenis_pembayaran_view.dart';
-import '../modules/pembayaran/views/create/views/add_periode_pembayaran_view.dart';
-import '../modules/pembayaran/views/jenis_pembayaran_view.dart';
-import '../modules/pembayaran/views/pembayaran_view.dart';
-import '../modules/pembayaran/views/periode_pembayaran_view.dart';
 import '../modules/authUsers/views/profile_view.dart';
 import '../modules/authUsers/views/register_view.dart';
 import '../modules/authUsers/views/reset_password_view.dart';
+import '../modules/home/bindings/home_binding.dart';
+import '../modules/home/views/home_view.dart';
+import '../modules/home/views/student_home_view.dart';
+import '../modules/pembayaran/bindings/pembayaran_binding.dart';
+import '../modules/pembayaran/views/biaya_pembayaran_view.dart';
+import '../modules/pembayaran/views/create/views/add_biaya_pembayaran_view.dart';
+import 'package:sekolah_app/app/modules/pembayaran/views/edit/view/edit_biaya_pembayaran_view.dart';
+import '../modules/pembayaran/views/jenis_pembayaran_view.dart';
+import '../modules/pembayaran/views/create/views/add_jenis_pembayaran_view.dart';
+import '../modules/pembayaran/views/edit/view/edit_jenis_pembayaran_view.dart';
+import '../modules/pembayaran/views/pembayaran_view.dart';
+import '../modules/pembayaran/views/periode_pembayaran_view.dart';
+import '../modules/pembayaran/views/create/views/add_periode_pembayaran_view.dart';
+import 'package:sekolah_app/app/modules/pembayaran/views/edit/view/edit_periode_pembayaran_view.dart';
+import '../modules/tagihan/bindings/tagihan_binding.dart';
+import '../modules/tagihan/views/tagihan_view.dart';
 
 part 'app_routes.dart';
 
@@ -28,6 +36,11 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.STUDENT_HOME,
+      page: () => const StudentHomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -66,8 +79,13 @@ class AppPages {
       binding: PembayaranBinding(),
     ),
     GetPage(
+      name: _Paths.EDIT_Jenis_PEMBAYARAN,
+      page: () => EditJenisPembayaranView(),
+      binding: PembayaranBinding(),
+    ),
+    GetPage(
       name: _Paths.Biaya_PEMBAYARAN,
-      page: () => const BiayaPembayaranView(),
+      page: () => BiayaPembayaranView(),
       binding: PembayaranBinding(),
     ),
     GetPage(
@@ -76,8 +94,13 @@ class AppPages {
       binding: PembayaranBinding(),
     ),
     GetPage(
+      name: _Paths.EDIT_Biaya_PEMBAYARAN,
+      page: () => EditBiayaPembayaranView(),
+      binding: PembayaranBinding(),
+    ),
+    GetPage(
       name: _Paths.Periode_PEMBAYARAN,
-      page: () => const PeriodePembayaranView(),
+      page: () => PeriodePembayaranView(),
       binding: PembayaranBinding(),
     ),
     GetPage(
@@ -86,9 +109,29 @@ class AppPages {
       binding: PembayaranBinding(),
     ),
     GetPage(
+      name: _Paths.EDIT_Periode_PEMBAYARAN,
+      page: () => EditPeriodePembayaranView(),
+      binding: PembayaranBinding(),
+    ),
+    GetPage(
       name: _Paths.AUTH_USERS,
       page: () => const AuthUsersView(),
       binding: AuthUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.TAGIHAN,
+      page: () => const TagihanView(),
+      binding: TagihanBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TAGIHAN_INDIVIDU,
+      page: () => const AddTagihanIndividuView(),
+      binding: TagihanBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TAGIHAN_KELOMPOK,
+      page: () => const AddTagihanKelompokView(),
+      binding: TagihanBinding(),
     ),
   ];
 }

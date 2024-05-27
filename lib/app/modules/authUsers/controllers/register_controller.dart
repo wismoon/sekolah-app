@@ -18,9 +18,9 @@ class RegisterController extends GetxController {
 
   void register() async {
     final email = emailController.text;
-    final name = emailController.text;
-    final nim = emailController.text;
-    final years = emailController.text;
+    final name = nameController.text;
+    final nim = nimController.text;
+    final years = tahunController.text;
     final password = passwordController.text;
 
     if (email.isNotEmpty && password.isNotEmpty) {
@@ -36,12 +36,21 @@ class RegisterController extends GetxController {
 
         await credential.user!.sendEmailVerification();
 
-        await firestore.collection("users").doc(credential.user!.uid).set({
+        await firestore.collection("siswa").doc(credential.user!.uid).set({
             "nim": nim,
             "nama": name,
+            "jurusan": '',
+            "fakultas": '',
+            "instansi": '',
             "tahun-angkatan": years,
+            "tanggal_lahir": '',
+            "tempat_lahir": '',
+            "jenis_kelamin": '',
+            "agama": '',
+            "nomor_telepon": '',
+            "alamat": '',
             "email": email,
-            "password": password,
+            "role": "student",
             "createdAt": DateTime.now().toIso8601String(),
             
         });
@@ -61,6 +70,10 @@ class RegisterController extends GetxController {
   }
 
   void errMsg(String msg) {
+    Get.snackbar("Terjadi Kesalahan", msg);
+  }
+
+  void succMsg(String msg) {
     Get.snackbar("Terjadi Kesalahan", msg);
   }
 }

@@ -35,7 +35,7 @@ class HomeView extends GetView<HomeController> {
                 title: "Tagihan",
                 bgColor: Colors.white,
                 imageUrl: "Tehe.png",
-                routeName: Routes.PEMBAYARAN,
+                routeName: Routes.TAGIHAN,
               ),
               MenuCustom(
                 title: "Pembayaran",

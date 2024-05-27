@@ -1,45 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/models/periode_pembayaran_model.dart';
+import 'package:sekolah_app/app/routes/app_pages.dart';
+import 'package:sekolah_app/app/services/periode_pembayaran_service.dart';
 
 class PeriodePembayaranController extends GetxController {
-  var nameJenis = TextEditingController();
-  final TextEditingController namePeriode = TextEditingController();
-  final RxString selectedJenisPembayaran = ''.obs;
-  final RxList<String> jenisPembayaranList = <String>[].obs;
-  final List<Map<String, String>> pembayaranList = [
-    {"no": "1", "nama": "SPP", "jenis": "Regular"},
-    {
-      "no": "2",
-      "nama": "SPP",
-      "jenis": "Regularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
-    },
-    {"no": "3", "nama": "SPP", "jenis": "Regular"},
-  ];
+  var namePeriode = TextEditingController();
+  var selectedJenis = ''.obs;
 
-  @override
-  void onClose() {
-    nameJenis.dispose();
-    super.onClose();
-  }
+  final PeriodePembayaranService _service = PeriodePembayaranService();
+  var periodePembayaranList = <PeriodePembayaran>[].obs;
+
+  var isBusy = false.obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
+    final arguments = Get.arguments;
+    if (arguments != null) {
+      namePeriode.text = arguments['nama'] ?? '';
+      selectedJenis.value = arguments['jenis'] ?? '';
+    }
+    fetchPeriodePembayaran();
     super.onInit();
-    fetchJenisPembayaran();
   }
 
-  void fetchJenisPembayaran() async {
-    final dataFromApi = await fetchFromApi();
-    jenisPembayaranList.assignAll(dataFromApi);
+  @override
+  void onClose() {
+    namePeriode.dispose();
+    super.onClose();
   }
 
-  Future<List<String>> fetchFromApi() async {
-    // Replace this with your actual API call
-    await Future.delayed(Duration(seconds: 2));
-    return ['Jenis 1', 'Jenis 2', 'Jenis 3']; // Replace with actual data from your API
+  void fetchPeriodePembayaran() async {
+    try {
+      isLoading(true);
+      var periodePembayaran = await _service.fetchPeriodePembayaran();
+      if (periodePembayaran.isEmpty) {
+        Get.snackbar('Data Error', 'Failed to load data because is Empty');
+      } else {
+        periodePembayaranList.value = periodePembayaran;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    } finally {
+      isLoading(false);
+    }
   }
 
-  void showBottomSheet(BuildContext context, Map<String, String> pembayaran) {
+  void createPeriodePembayaran(PeriodePembayaran periodePembayaran) async {
+    isBusy.value = true;
+    try {
+      await _service.createPeriodePembayaran(periodePembayaran);
+      print('Biaya Pembayaran created successfully');
+      Get.snackbar('Success', 'Biaya Pembayaran created successfully');
+      namePeriode.clear();
+      selectedJenis.value = '';
+    } catch (e) {
+      print('Error: $e');
+      Get.snackbar('Error', 'Failed to create data: $e');
+    } finally {
+      isBusy.value = false;
+    }
+    fetchPeriodePembayaran();
+  }
+
+  void updatePeriodePembayaran(PeriodePembayaran periodePembayaran) async {
+    await _service.updatePeriodePembayaran(periodePembayaran);
+    fetchPeriodePembayaran();
+  }
+
+  void deletePeriodePembayaran(int id) async {
+    isBusy(true);
+    try {
+      await _service.deletePeriodePembayaran(id);
+      Get.snackbar('Success', 'Jenis Pembayaran deleted successfully');
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isBusy(false);
+    }
+    fetchPeriodePembayaran();
+  }
+
+  void showBottomSheet(BuildContext context, PeriodePembayaran pembayaran) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // This is necessary for custom height
@@ -53,10 +96,10 @@ class PeriodePembayaranController extends GetxController {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('No: ${pembayaran["no"]}', style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran["nama"]}',
+                Text('No: ${pembayaran.id}', style: TextStyle(fontSize: 20)),
+                Text('Nama Pembayaran: ${pembayaran.nama}',
                     style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran["jenis"]}',
+                Text('Periode Pembayaran: ${pembayaran.jenis}',
                     style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 20),
                 Spacer(), // Push the buttons to the bottom
@@ -65,16 +108,27 @@ class PeriodePembayaranController extends GetxController {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Handle edit action here
-                        Navigator.pop(context);
+                        try {
+                          Navigator.pop(context);
+                          Get.toNamed(
+                            Routes.EDIT_Periode_PEMBAYARAN,
+                            arguments: {
+                              'id': pembayaran.id,
+                              // 'id_akun': pembayaran.id_akun,
+                              'nama': pembayaran.nama,
+                              'jenis': pembayaran.jenis,
+                            },
+                          );
+                        } catch (e) {
+                          Get.snackbar('Error', 'Failed to load data: $e');
+                        }
                       },
                       child: const Text('Edit'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle delete action here
+                        deletePeriodePembayaran(pembayaran.id!);
                         Navigator.pop(context);
-                        // Add your delete logic here
                       },
                       child: const Text('Delete'),
                       style: ElevatedButton.styleFrom(

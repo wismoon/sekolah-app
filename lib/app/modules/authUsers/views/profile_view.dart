@@ -12,84 +12,125 @@ class ProfileView extends GetView<ProfileController> {
       appBar: AppBar(
         title: const Text('ProfileView'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () => controller.logout(), icon: Icon(Icons.logout))
+        ],
       ),
-      body: Center(
-          child: ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              TextField(
-                autocorrect: false,
-                // controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: "Nama",
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                autocorrect: false,
-                // controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.numbers),
-                    labelText: "Nim",
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                autocorrect: false,
-                // controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.numbers),
-                    labelText: "Tahun Angkatan",
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                autocorrect: false,
-                // controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: "Email",
-                    border: OutlineInputBorder()),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                autocorrect: false,
-                // controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: "Password",
-                    border: OutlineInputBorder()),
-              ),
-              SizedBox(height: 20,),
-              Obx(() => ElevatedButton(
-                  onPressed: () {
-                    controller.logout();
-                  },
-                  child: 
-                  Text(
-                      controller.isLoading.isFalse ? "Logout" : "Loading"))
+      body: FutureBuilder<Map<String, dynamic>?>(
+          future: controller.getProfile(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+            if (snapshot.data == null) {
+              return Center(
+                child: Text("Tidak ada Data"),
+              );
+            } else {
+              controller.emailC.text = snapshot.data!["email"];
+              controller.nameC.text = snapshot.data!["nama"];
+              controller.nimC.text = snapshot.data!["nim"];
+              controller.yearC.text = snapshot.data!["tahun-angkatan"];
+              // controller.passwordC.text = snapshot.data!["password"];
+              return ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  TextField(
+                    autocorrect: false,
+                    controller: controller.nameC,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email),
+                        labelText: "Nama",
+                        border: OutlineInputBorder()),
                   ),
-            ],
-          ),
-        ));
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    autocorrect: false,
+                    controller: controller.nimC,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.numbers),
+                        labelText: "Nim",
+                        border: OutlineInputBorder()),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    autocorrect: false,
+                    controller: controller.yearC,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.numbers),
+                        labelText: "Tahun Angkatan",
+                        border: OutlineInputBorder()),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    autocorrect: false,
+                    readOnly: true,
+                    controller: controller.emailC,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email),
+                        labelText: "Email",
+                        border: OutlineInputBorder()),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Obx(() => TextField(
+                        autocorrect: false,
+                        obscureText: controller.isHidden.value,
+                        controller: controller.passwordC,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.key),
+                            suffixIcon: IconButton(
+                                onPressed: () => controller.isHidden.toggle(),
+                                icon: controller.isHidden.isFalse
+                                    ? const Icon(Icons.visibility_off)
+                                    : const Icon(Icons.visibility)),
+                            labelText: "Password",
+                            border: const OutlineInputBorder()),
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Obx(() => ElevatedButton(
+                      onPressed: () {
+                        controller.updateProfile();
+                      },
+                      child: Text(controller.isLoading.isFalse
+                          ? "Update"
+                          : "Loading.."))),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Obx(() => ElevatedButton(
+                      onPressed: () {
+                        controller.logout();
+                      },
+                      child: Text(controller.isLoading.isFalse
+                          ? "Logout"
+                          : "Loading.."))),
+                ],
+              );
+            }
+          }),
+    );
   }
 }

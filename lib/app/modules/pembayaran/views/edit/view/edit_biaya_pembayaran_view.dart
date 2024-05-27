@@ -2,24 +2,30 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/biaya_pembayaran_controller.dart';
-import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/jenis_pembayaran_controller.dart';
 
-class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
-  const AddBiayaPembayaranView({Key? key}) : super(key: key);
+
+class EditBiayaPembayaranView extends GetView<BiayaPembayaranController> {
+  
   @override
   Widget build(BuildContext context) {
-    
+
+    final arguments = Get.arguments;
     final jenisPembayaranController = Get.put(JenisPembayaranController());
+    
+    controller.nameBiaya.text = arguments['nama'];
+    controller.selectedJenis.value = arguments['jenis'];
+    controller.nameStudi.text = arguments['programStudi'];
+    controller.biaya.text = arguments['biaya']; 
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('AddBiayaPembayaranView'),
-          centerTitle: true,
-        ),
-        body: Padding(
+      appBar: AppBar(
+        title: const Text('EditBiayaPembayaranView'),
+        centerTitle: true,
+      ),
+      body: ListView(
           padding: EdgeInsets.all(20),
-          child: ListView(children: [
+          children: [
             TextField(
               controller: controller.nameBiaya,
               decoration: InputDecoration(
@@ -33,6 +39,7 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
                 labelText: 'Nama Pembayaran',
               ),
             ),
+            const SizedBox(height: 20),
             Obx(() {
               if (jenisPembayaranController.isLoading.value) {
                 return Center(child: CircularProgressIndicator());
@@ -92,21 +99,17 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: controller.isBusy.value
-                  ? null
-                  : () {
-                      Biayapembayaran biayapembayaran = Biayapembayaran(
-                        nama: controller.nameBiaya.text,
-                        jenis: controller.selectedJenis.value,
-                        programStudi: controller.nameStudi.text,
-                        biaya: controller.biaya.text,
-                      );
-                      controller.createBiayaPembayaran(biayapembayaran);
-                      Navigator.pop(context);
-                    },
-              child: Text(controller.isLoading.isFalse ? "Tambah" : "Loading"),
+              onPressed: () {
+                // print('Name: ${controller.nameJenis.text}');
+                // print('Kode: ${controller.kodeJenis.text}');
+                // print('Selected: ${controller.selectedValue.value}');
+                // print('Comment: ${controller.commentJenis.text}');
+              },
+              child: Text(
+                      controller.isLoading.isFalse ? "Update" : "Loading")
             ),
-          ]),
-        ));
+          ]
+      )
+    );
   }
 }

@@ -1,62 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/routes/app_pages.dart';
+import 'package:sekolah_app/app/services/biaya_pembayaran_service.dart';
+import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 
 class BiayaPembayaranController extends GetxController {
-  var namePeriode = TextEditingController();
   var nameBiaya = TextEditingController();
-  final RxString selectedJenisPembayaran = ''.obs;
-  final RxList<String> jenisPembayaranList = <String>[].obs;
-  final List<Map<String, String>> pembayaranList = [
-    {"no": "1", "nama": "SPP", "jenis": "Regular", "biaya": "RP.500000"},
-    {
-      "no": "2",
-      "nama": "SPP",
-      "jenis": "Regularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-      "biaya": "RP.500000"
-    },
-    {"no": "3", "nama": "SPP", "jenis": "Regular", "biaya": "RP.500000"},
-  ];
+  var selectedJenis = ''.obs;
+  var nameStudi = TextEditingController();
+  var biaya = TextEditingController();
+
+  final BiayaPembayaranService _service = BiayaPembayaranService();
+  var biayaPembayaranList = <Biayapembayaran>[].obs;
+
+  var isBusy = false.obs;
+  var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    final arguments = Get.arguments;
+    if (arguments != null) {
+      nameBiaya.text = arguments['nama'] ?? '';
+      selectedJenis.value = arguments['jenis'] ?? '';
+      nameStudi.text = arguments['programStudi'] ?? '';
+      biaya.text = arguments['biaya'] ?? '';
+    }
+    fetchBiayaPembayaran();
+    super.onInit();
+  }
 
   @override
   void onClose() {
     nameBiaya.dispose();
+    nameStudi.dispose();
+    biaya.dispose();
     super.onClose();
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchJenisPembayaran();
+
+  void fetchBiayaPembayaran() async {
+    try {
+      isLoading(true);
+      var biayaPembayaran = await _service.fetchBiayaPembayaran();
+      if (biayaPembayaran.isEmpty) {
+        Get.snackbar('Data Error', 'Failed to load data because is Empty');
+      } else {
+        biayaPembayaranList.value = biayaPembayaran;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    } finally {
+      isLoading(false);
+    }
   }
 
-  void fetchJenisPembayaran() async {
-    final dataFromApi = await fetchFromApi();
-    jenisPembayaranList.assignAll(dataFromApi);
+  void createBiayaPembayaran(Biayapembayaran biayaPembayaran) async {
+    isBusy.value = true;
+    try {
+      await _service.createBiayaPembayaran(biayaPembayaran);
+      print('Biaya Pembayaran created successfully');
+      Get.snackbar('Success', 'Biaya Pembayaran created successfully');
+      nameBiaya.clear();
+      nameStudi.clear();
+      biaya.clear();
+      selectedJenis.value;
+    } catch (e) {
+      print('Error: $e');
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isBusy.value = false;
+    }
+    fetchBiayaPembayaran();
   }
 
-  Future<List<String>> fetchFromApi() async {
-    // Replace this with your actual API call
-    await Future.delayed(Duration(seconds: 2));
-    return ['Jenis 1', 'Jenis 2', 'Jenis 3']; // Replace with actual data from your API
+  void deleteBiayaPembayaran(int id) async {
+    isBusy(true);
+    try {
+      await _service.deleteBiayaPembayaran(id);
+      Get.snackbar('Success', 'Jenis Pembayaran deleted successfully');
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isBusy(false);
+    }
+    fetchBiayaPembayaran();
   }
 
-  void showBottomSheet(BuildContext context, Map<String, String> pembayaran) {
+  void showBottomSheet(BuildContext context, Biayapembayaran pembayaran) {
     showModalBottomSheet(
       context: context,
-     isScrollControlled: true, // This is necessary for custom height
+      isScrollControlled: true, // This is necessary for custom height
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.5, // Adjust the height factor to make it half of the screen height
+          heightFactor:
+              0.5, // Adjust the height factor to make it half of the screen height
           child: Container(
             padding: const EdgeInsets.all(16.0),
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('No: ${pembayaran["no"]}', style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran["nama"]}', style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran["jenis"]}', style: TextStyle(fontSize: 20)),
-                Text('Biaya Pembayaran: ${pembayaran["biaya"]}', style: TextStyle(fontSize: 20)),
+                Text('No: ${pembayaran.id.toString()}', style: TextStyle(fontSize: 20)),
+                Text('Nama Pembayaran: ${pembayaran.nama}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Jenis Pembayaran: ${pembayaran.jenis}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Biaya Pembayaran: ${pembayaran.biaya}',
+                    style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 20),
                 Spacer(), // Push the buttons to the bottom
                 Row(
@@ -64,21 +114,33 @@ class BiayaPembayaranController extends GetxController {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Handle edit action here
-                        Navigator.pop(context);
-                        
+                        try {
+                          Navigator.pop(context);
+                          Get.toNamed(
+                            Routes.EDIT_Biaya_PEMBAYARAN,
+                            arguments: {
+                              'id': pembayaran.id,
+                              // 'id_akun': pembayaran.id_akun,
+                              'nama': pembayaran.nama,
+                              'jenis': pembayaran.jenis,
+                              'programStudi': pembayaran.programStudi,
+                              'biaya': pembayaran.biaya
+                            },
+                          );
+                        } catch (e) {
+                          Get.snackbar('Error', 'Failed to load data: $e');
+                        }
                       },
                       child: const Text('Edit'),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle delete action here
+                      onPressed: ()  {
+                        deleteBiayaPembayaran(pembayaran.id!);
                         Navigator.pop(context);
-                        // Add your delete logic here
                       },
                       child: const Text('Delete'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red, // Set the delete button color to red
+                        backgroundColor:Colors.red, 
                       ),
                     ),
                   ],
