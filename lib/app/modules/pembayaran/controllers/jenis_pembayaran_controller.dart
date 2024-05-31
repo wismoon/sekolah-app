@@ -8,7 +8,7 @@ import 'package:sekolah_app/app/routes/app_pages.dart';
 import 'package:sekolah_app/app/services/jenis_pembayaran_service.dart';
 
 class JenisPembayaranController extends GetxController {
-  var selectedValue = ''.obs;
+  var pembayaranValue = ''.obs;
   var nameJenis = TextEditingController();
   var kodeJenis = TextEditingController();
   var commentJenis = TextEditingController();
@@ -25,7 +25,7 @@ class JenisPembayaranController extends GetxController {
     if (arguments != null) {
       nameJenis.text = arguments['nama'] ?? '';
       kodeJenis.text = arguments['kode'] ?? '';
-      selectedValue.value = arguments['pembayaran'] ?? '';
+      pembayaranValue.value = arguments['pembayaran'] ?? '';
       commentJenis.text = arguments['keterangan'] ?? '';
     }
     fetchJenisPembayaran();
@@ -48,6 +48,8 @@ class JenisPembayaranController extends GetxController {
         Get.snackbar('Data Error', 'Failed to load data because is Empty');
       } else {
         jenisPembayaranList.value = jenisPembayaran;
+        print(
+            "Fetched Jenis Pembayaran List: ${jenisPembayaranList.map((e) => e.toJson()).toList()}");
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
@@ -56,22 +58,30 @@ class JenisPembayaranController extends GetxController {
     }
   }
 
+  JenisPembayaran? getJenisPembayaranByNama(String nama) {
+    var jenis =
+        jenisPembayaranList.firstWhereOrNull((jenis) => jenis.nama == nama);
+    print("Selected Jenis Pembayaran for '$nama': ${jenis?.toJson()}");
+    return jenis;
+  }
+
   void updateJenisPembayaran(int id, String? id_akun) async {
     try {
       isBusy(true);
-       print('Updating jenis pembayaran with ID: $id and id_akun: $id_akun');
+      print('Updating jenis pembayaran with ID: $id and id_akun: $id_akun');
       JenisPembayaran jenisPembayaran = JenisPembayaran(
         id: id,
-        id_akun: id_akun,
+        idAkun: id_akun,
         kode: kodeJenis.text,
         nama: nameJenis.text,
-        pembayaran: selectedValue.value,
+        pembayaran: pembayaranValue.value,
         keterangan: commentJenis.text,
       );
 
-      print('Data being sent for update: ${jsonEncode(jenisPembayaran.toJson())}');
+      print(
+          'Data being sent for update: ${jsonEncode(jenisPembayaran.toJson())}');
       await _service.updateJenisPembayaran(jenisPembayaran, id_akun);
-      
+
       Get.snackbar('Success', 'Jenis Pembayaran updated successfully');
     } catch (e) {
       print('Error updating jenis pembayaran: $e');
@@ -79,7 +89,7 @@ class JenisPembayaranController extends GetxController {
     } finally {
       isBusy(false);
     }
-      fetchJenisPembayaran();
+    fetchJenisPembayaran();
   }
 
   void createJenisPembayaran(JenisPembayaran jenisPembayaran) async {
@@ -91,7 +101,7 @@ class JenisPembayaranController extends GetxController {
       nameJenis.clear();
       kodeJenis.clear();
       commentJenis.clear();
-      selectedValue.value;
+      pembayaranValue.value;
     } catch (e) {
       print('Error: $e');
       Get.snackbar('Error', e.toString());
@@ -148,7 +158,7 @@ class JenisPembayaranController extends GetxController {
                             Routes.EDIT_Jenis_PEMBAYARAN,
                             arguments: {
                               'id': pembayaran.id,
-                              'id_akun': pembayaran.id_akun,
+                              'id_akun': pembayaran.idAkun,
                               'kode': pembayaran.kode,
                               'nama': pembayaran.nama,
                               'pembayaran': pembayaran.pembayaran,

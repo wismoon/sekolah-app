@@ -7,4 +7,8 @@ class TagihanController extends GetxController {
   void toggleButtons() {
     showAdditionalButtons.value = !showAdditionalButtons.value;
   }
+  
+  void hideButtons() {
+    showAdditionalButtons.value = false;
+  }
 }

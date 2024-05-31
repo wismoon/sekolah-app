@@ -9,6 +9,7 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
   static const PROFILE = _Paths.PROFILE;
+  static const STUDENT_PROFILE = _Paths.STUDENT_PROFILE;
   static const PEMBAYARAN = _Paths.PEMBAYARAN;
   static const Jenis_PEMBAYARAN = _Paths.Jenis_PEMBAYARAN;
   static const ADD_Jenis_PEMBAYARAN = _Paths.ADD_Jenis_PEMBAYARAN;
@@ -35,6 +36,7 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const RESET_PASSWORD = '/reset-password';
   static const PROFILE = '/profile';
+  static const STUDENT_PROFILE = '/student_profile';
   static const PEMBAYARAN = '/pembayaran';
   static const Jenis_PEMBAYARAN = '/jenis_pembayaran';
   static const ADD_Jenis_PEMBAYARAN = '/add_jenis_pembayaran';

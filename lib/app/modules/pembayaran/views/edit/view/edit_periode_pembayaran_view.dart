@@ -11,9 +11,9 @@ class EditPeriodePembayaranView extends GetView<PeriodePembayaranController> {
     final jenisPembayaranController = Get.put(JenisPembayaranController());
 
     // final jenisArgument = arguments['jenis'];
-    controller.selectedJenis.value = arguments['jenis'].join(', ');
+    controller.selectedJenisPeriode.value = arguments['jenis'].join(', ');
     controller.namePeriode.text = arguments['nama'];
-    // controller.selectedJenis.value = arguments['jenis'];
+    // controller.selectedJenisPeriode.value = arguments['jenis'];
 
     return Scaffold(
         appBar: AppBar(
@@ -40,9 +40,9 @@ class EditPeriodePembayaranView extends GetView<PeriodePembayaranController> {
               return Center(child: CircularProgressIndicator());
             }
             return DropdownButtonFormField<String>(
-              value: controller.selectedJenis.value.isEmpty
+              value: controller.selectedJenisPeriode.value.isEmpty
                   ? null
-                  : controller.selectedJenis.value,
+                  : controller.selectedJenisPeriode.value,
               items: jenisPembayaranController.jenisPembayaranList.map((jenis) {
                 return DropdownMenuItem<String>(
                   value: jenis.nama,
@@ -50,7 +50,7 @@ class EditPeriodePembayaranView extends GetView<PeriodePembayaranController> {
                 );
               }).toList(),
               onChanged: (value) {
-                controller.selectedJenis(value);
+                controller.selectedJenisPeriode(value);
               },
               decoration: InputDecoration(
                 border: OutlineInputBorder(

@@ -12,7 +12,7 @@ class EditJenisPembayaranView extends GetView<JenisPembayaranController> {
     controller.nameJenis.text = arguments['nama'];
     controller.nameJenis.text = arguments['nama'];
     controller.kodeJenis.text = arguments['kode'];
-    controller.selectedValue.value = arguments['pembayaran'];
+    controller.pembayaranValue.value = arguments['pembayaran'];
     controller.commentJenis.text = arguments['keterangan']; 
 
     return Scaffold(
@@ -60,18 +60,18 @@ class EditJenisPembayaranView extends GetView<JenisPembayaranController> {
                       _buildRadioButton(
                         label: 'REGULAR',
                         value: 'REGULAR',
-                        groupValue: controller.selectedValue.value,
+                        groupValue: controller.pembayaranValue.value,
                         onChanged: (String value) {
-                            controller.selectedValue.value = value;
+                            controller.pembayaranValue.value = value;
                         }
                       ),
                       const SizedBox(width: 16),
                       _buildRadioButton(
                         label: 'NON REGULAR',
                         value: 'NON REGULAR',
-                        groupValue: controller.selectedValue.value,
+                        groupValue: controller.pembayaranValue.value,
                         onChanged: (String value) {
-                            controller.selectedValue.value = value;
+                            controller.pembayaranValue.value = value;
                         }
                       ),
                     ],

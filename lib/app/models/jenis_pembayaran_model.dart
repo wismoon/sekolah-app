@@ -1,6 +1,6 @@
 class JenisPembayaran {
   int? id;
-  String? id_akun;
+  String? idAkun;
   String? nama;
   String? kode;
   String? pembayaran;
@@ -11,7 +11,7 @@ class JenisPembayaran {
 
   JenisPembayaran(
       {this.id,
-      this.id_akun,
+      this.idAkun,
       this.nama,
       this.kode,
       this.pembayaran,
@@ -22,7 +22,7 @@ class JenisPembayaran {
 
   JenisPembayaran.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    id_akun = json['id_akun'];
+    idAkun = json['id_akun'];
     nama = json['nama'];
     kode = json['kode'];
     pembayaran = json['pembayaran'];
@@ -35,7 +35,7 @@ class JenisPembayaran {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;
-    data['id_akun'] = id_akun;
+    data['id_akun'] = idAkun;
     data['nama'] = nama;
     data['kode'] = kode;
     data['pembayaran'] = pembayaran;

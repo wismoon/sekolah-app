@@ -6,7 +6,7 @@ import 'package:sekolah_app/app/services/periode_pembayaran_service.dart';
 
 class PeriodePembayaranController extends GetxController {
   var namePeriode = TextEditingController();
-  var selectedJenis = ''.obs;
+  var selectedJenisPeriode = ''.obs;
 
   final PeriodePembayaranService _service = PeriodePembayaranService();
   var periodePembayaranList = <PeriodePembayaran>[].obs;
@@ -19,7 +19,7 @@ class PeriodePembayaranController extends GetxController {
     final arguments = Get.arguments;
     if (arguments != null) {
       namePeriode.text = arguments['nama'] ?? '';
-      selectedJenis.value = arguments['jenis'] ?? '';
+      selectedJenisPeriode.value = arguments['jenis'] ?? '';
     }
     fetchPeriodePembayaran();
     super.onInit();
@@ -54,7 +54,7 @@ class PeriodePembayaranController extends GetxController {
       print('Biaya Pembayaran created successfully');
       Get.snackbar('Success', 'Biaya Pembayaran created successfully');
       namePeriode.clear();
-      selectedJenis.value = '';
+      selectedJenisPeriode.value = '';
     } catch (e) {
       print('Error: $e');
       Get.snackbar('Error', 'Failed to create data: $e');

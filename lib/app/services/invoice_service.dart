@@ -1,13 +1,57 @@
+import 'dart:convert';
+
+import 'package:sekolah_app/app/core/constant/api_constant.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
+import 'package:http/http.dart' as http;
 
 class InvoiceService {
-  // Future<List<Invoice>> fetchPembayaran() async {
-  //   // Mock data for example
-    
-  // }
 
-  Future<void> createPembayaran(Invoice pembayaran) async {
-    // Code to create a new pembayaran
+  Future<void> createInvoicePembayaran(Invoice invoicePembayaran) async {
+    final response = await http.post(
+      Uri.parse(
+          '${BaseUrlConstants.baseUrl}${InvoiceEndpoints.invoicePembayaran}'),
+      headers: <String, String>{
+        'Content-Type': BaseUrlConstants.contentTypeJson,
+        'Authorization': 'Bearer ${AuthConstants.bearerToken}'
+      },
+      body: jsonEncode(invoicePembayaran.toJson()),
+    );
+
+    // print(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Request was successful, no need to throw an exception
+      print('Invoice Pembayaran created successfully');
+    } else {
+      // Handle other status codes as errors
+      final responseJson = jsonDecode(response.body);
+      final errorMessage = responseJson['data']['message'] ?? 'Unknown error';
+      print('Server Error: $responseJson');
+      throw Exception('Failed to create invoice pembayaran: $errorMessage');
+    }
+  }
+
+  Future<void> createInvoiceBulkPembayaran(Invoice invoicePembayaran) async {
+    final response = await http.post(
+      Uri.parse(
+          '${BaseUrlConstants.baseUrl}${InvoiceEndpoints.invoicePembayaran}'),
+      headers: <String, String>{
+        'Content-Type': BaseUrlConstants.contentTypeJson,
+        'Authorization': 'Bearer ${AuthConstants.bearerToken}'
+      },
+      body: jsonEncode(invoicePembayaran.toJson()),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Request was successful, no need to throw an exception
+      print('Invoice Pembayaran created successfully');
+    } else {
+      // Handle other status codes as errors
+      final responseJson = jsonDecode(response.body);
+      final errorMessage = responseJson['data']['message'] ?? 'Unknown error';
+      print('Server Error: $responseJson');
+      throw Exception('Failed to create invoice pembayaran: $errorMessage');
+    }
   }
 
   Future<void> updatePembayaran(Invoice pembayaran) async {

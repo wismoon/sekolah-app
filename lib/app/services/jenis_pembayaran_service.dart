@@ -14,6 +14,8 @@ class JenisPembayaranService {
       },
     );
 
+    print('API Response: ${response.body}');
+
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
       var data = jsonResponse['data']['jenisPembayaran'];

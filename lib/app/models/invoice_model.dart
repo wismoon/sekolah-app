@@ -1,14 +1,15 @@
 class Invoice {
   int? id;
   String? idAkun;
-  String? nomorPembayaran;
-  String? namaPembayaran;
-  String? biayaPembayaran;
-  String? kodePembayaran;
+  String? nomor_pembayaran;
+  String? nama_pembayaran;
+  String? biaya_pembayaran;
+  String? jenis_pembayaran;
+  String? kode_pembayaran;
   String? keterangan;
   String? nim;
   String? nama;
-  String? programStudi;
+  String? program_studi;
   String? fakultas;
   String? instansi;
   String? email;
@@ -17,18 +18,20 @@ class Invoice {
   String? kota;
   String? kodePos;
   String? negara;
+  List<Map<String, dynamic>>? individu;
 
   Invoice(
       {this.id,
       this.idAkun,
-      this.nomorPembayaran,
-      this.namaPembayaran,
-      this.biayaPembayaran,
-      this.kodePembayaran,
+      this.nomor_pembayaran,
+      this.nama_pembayaran,
+      this.biaya_pembayaran,
+      this.jenis_pembayaran,
+      this.kode_pembayaran,
       this.keterangan,
       this.nim,
       this.nama,
-      this.programStudi,
+      this.program_studi,
       this.fakultas,
       this.instansi,
       this.email,
@@ -36,19 +39,21 @@ class Invoice {
       this.alamat,
       this.kota,
       this.kodePos,
-      this.negara});
+      this.negara,
+      this.individu});
 
   Invoice.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     idAkun = json['id_akun'];
-    nomorPembayaran = json['nomor_pembayaran'];
-    namaPembayaran = json['nama_pembayaran'];
-    biayaPembayaran = json['biaya_pembayaran'];
-    kodePembayaran = json['kode_pembayaran'];
+    nomor_pembayaran = json['nomor_pembayaran'];
+    nama_pembayaran = json['nama_pembayaran'];
+    biaya_pembayaran = json['biaya_pembayaran'];
+    jenis_pembayaran = json['jenis_pembayaran'];
+    kode_pembayaran = json['kode_pembayaran'];
     keterangan = json['keterangan'];
     nim = json['nim'];
     nama = json['nama'];
-    programStudi = json['program_studi'];
+    program_studi = json['program_studi'];
     fakultas = json['fakultas'];
     instansi = json['instansi'];
     email = json['email'];
@@ -57,20 +62,24 @@ class Invoice {
     kota = json['kota'];
     kodePos = json['kode_pos'];
     negara = json['negara'];
+    if (json['individu'] != null) {
+      individu = List<Map<String, dynamic>>.from(json['individu']);
+    }
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['id_akun'] = idAkun;
-    data['nomor_pembayaran'] = nomorPembayaran;
-    data['nama_pembayaran'] = namaPembayaran;
-    data['biaya_pembayaran'] = biayaPembayaran;
-    data['kode_pembayaran'] = kodePembayaran;
+    data['nomor_pembayaran'] = nomor_pembayaran;
+    data['nama_pembayaran'] = nama_pembayaran;
+    data['biaya_pembayaran'] = biaya_pembayaran;
+    data['jenis_pembayaran'] = jenis_pembayaran;
+    data['kode_pembayaran'] = kode_pembayaran;
     data['keterangan'] = keterangan;
     data['nim'] = nim;
     data['nama'] = nama;
-    data['program_studi'] = programStudi;
+    data['program_studi'] = program_studi;
     data['fakultas'] = fakultas;
     data['instansi'] = instansi;
     data['email'] = email;
@@ -79,6 +88,9 @@ class Invoice {
     data['kota'] = kota;
     data['kode_pos'] = kodePos;
     data['negara'] = negara;
+    if (individu != null) {
+      data['individu'] = individu;
+    }
     return data;
   }
 }

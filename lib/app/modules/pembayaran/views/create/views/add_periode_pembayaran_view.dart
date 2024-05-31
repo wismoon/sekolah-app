@@ -39,9 +39,9 @@ class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
                 return Center(child: CircularProgressIndicator());
               }
               return DropdownButtonFormField<String>(
-                value: controller.selectedJenis.value.isEmpty
+                value: controller.selectedJenisPeriode.value.isEmpty
                     ? null
-                    : controller.selectedJenis.value,
+                    : controller.selectedJenisPeriode.value,
                 items: jenisPembayaranController.jenisPembayaranList.map((jenis) {
                   return DropdownMenuItem<String>(
                     value: jenis.nama,
@@ -49,7 +49,7 @@ class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  controller.selectedJenis(value);
+                  controller.selectedJenisPeriode(value);
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -70,7 +70,7 @@ class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
                   : () {
                       PeriodePembayaran periodePembayaran = PeriodePembayaran(
                         nama: controller.namePeriode.text,
-                        jenis: [controller.selectedJenis.value],
+                        jenis: [controller.selectedJenisPeriode.value],
                       );
                       controller.createPeriodePembayaran(periodePembayaran);
                       Navigator.pop(context);

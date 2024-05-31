@@ -33,6 +33,7 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
                 labelText: 'Nama Pembayaran',
               ),
             ),
+            SizedBox(height: 20),
             Obx(() {
               if (jenisPembayaranController.isLoading.value) {
                 return Center(child: CircularProgressIndicator());
@@ -78,6 +79,34 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: controller.nameSemester,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 2.0,
+                  ),
+                ),
+                labelText: 'Semester',
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: controller.nameTahunAngkatan,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 2.0,
+                  ),
+                ),
+                labelText: 'Tahun Angkatan',
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
               controller: controller.biaya,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -99,12 +128,14 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
                         nama: controller.nameBiaya.text,
                         jenis: controller.selectedJenis.value,
                         programStudi: controller.nameStudi.text,
+                        semester: controller.nameSemester.text,
+                        tahunAngkatan: controller.nameTahunAngkatan.text,
                         biaya: controller.biaya.text,
                       );
                       controller.createBiayaPembayaran(biayapembayaran);
                       Navigator.pop(context);
                     },
-              child: Text(controller.isLoading.isFalse ? "Tambah" : "Loading"),
+              child: Text(controller.isLoading.isFalse ? "Loading" : "Tambah"),
             ),
           ]),
         ));

@@ -42,7 +42,7 @@ class LoginController extends GetxController {
 
           if (docSiswa.exists) {
             // User found in the siswa collection
-            handleUserLogin("siswa", email, password, credential);
+            handleUserLogin("student", email, password, credential);
           } else {
             // User not found in both collections
             isLoading.value = false;
@@ -50,7 +50,81 @@ class LoginController extends GetxController {
           }
         }
 
-        // isLoading.value = false;
+      } on FirebaseAuthException catch (e) {
+        isLoading.value = false;
+        print(e.code);
+        if (e.code == 'user-not-found') {
+          Get.snackbar("Email Belum Terdaftar", "Email Anda Belum Terdaftar");
+        } else if (e.code == 'invalid-credential') {
+          errMsg("Password Anda Salah");
+        }
+      }
+    } else {
+      errMsg("Email & Password harus diisi");
+    }
+  }
+
+  void handleUserLogin(String role, String email, String password, UserCredential credential) async {
+    isLoading.value = false;
+
+    if (credential.user!.emailVerified == true) {
+      if (box.read("rememberme") != null) {
+        await box.remove("rememberme");
+      }
+
+      if (rememberme.isTrue) {
+        await box.write("rememberme", {
+          "email": email,
+          "password": password,
+        });
+      }
+
+      await box.write("role", role);
+
+    // Navigate based on role
+    if (role == "admin") {
+      Get.offAllNamed(Routes.HOME);
+    } else if (role == "student") {
+      Get.offAllNamed(Routes.STUDENT_HOME);
+    } 
+
+
+    } else {
+      print("email belum terverifikasi");
+      Get.defaultDialog(
+          title: "Belum terverifikasi",
+          middleText: "Apakah anda ingin mengirimkan email verifikasi kembali?",
+          actions: [
+            OutlinedButton(
+                onPressed: () => Get.back(), child: Text("Tidak")),
+            ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await credential.user!.sendEmailVerification();
+                    Get.back();
+                    Get.snackbar("Terkirim", "Email Verifikasi Berhasil Terkirim");
+                  } catch (e) {
+                    print(e);
+                    Get.back();
+                    Get.snackbar("Email Sudah Terkirim", "Silahkan Verifikasi Email Anda");
+                  }
+                },
+                child: Text("Kirim")),
+          ]);
+    }
+  }
+
+  void errMsg (String msg) {
+    Get.snackbar("Terjadi Kesalahan", msg);
+  }
+
+  void succMsg (String msg) {
+    Get.snackbar("Terjadi Kesalahan", msg);
+  }
+}
+
+
+ // isLoading.value = false;
 
         // if (credential.user!.emailVerified == true ) {
         //   if (box.read("rememberme") != null) {
@@ -90,72 +164,3 @@ class LoginController extends GetxController {
         //             child: Text("Kirim"))
         //       ]);
         // }
-
-      } on FirebaseAuthException catch (e) {
-        isLoading.value = false;
-        print(e.code);
-        if (e.code == 'user-not-found') {
-          Get.snackbar("Email Belum Terdaftar", "Email Anda Belum Terdaftar");
-        } else if (e.code == 'invalid-credential') {
-          errMsg("Password Anda Salah");
-        }
-      }
-    } else {
-      errMsg("Email & Password harus diisi");
-    }
-  }
-
-  void handleUserLogin(String role, String email, String password, UserCredential credential) async {
-    isLoading.value = false;
-
-    if (credential.user!.emailVerified == true) {
-      if (box.read("rememberme") != null) {
-        await box.remove("rememberme");
-      }
-
-      if (rememberme.isTrue) {
-        await box.write("rememberme", {
-          "email": email,
-          "password": password,
-        });
-      }
-
-      if (role == "admin") {
-        Get.offAllNamed(Routes.HOME);
-      } else if (role == "siswa") {
-        Get.offAllNamed(Routes.STUDENT_HOME);
-      }
-
-    } else {
-      print("email belum terverifikasi");
-      Get.defaultDialog(
-          title: "Belum terverifikasi",
-          middleText: "Apakah anda ingin mengirimkan email verifikasi kembali?",
-          actions: [
-            OutlinedButton(
-                onPressed: () => Get.back(), child: Text("Tidak")),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await credential.user!.sendEmailVerification();
-                    Get.back();
-                    Get.snackbar("Terkirim", "Email Verifikasi Berhasil Terkirim");
-                  } catch (e) {
-                    print(e);
-                    Get.back();
-                    Get.snackbar("Email Sudah Terkirim", "Silahkan Verifikasi Email Anda");
-                  }
-                },
-                child: Text("Kirim")),
-          ]);
-    }
-  }
-
-  void errMsg (String msg) {
-    Get.snackbar("Terjadi Kesalahan", msg);
-  }
-
-  void succMsg (String msg) {
-    Get.snackbar("Terjadi Kesalahan", msg);
-  }
-}

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/modules/authUsers/views/student_profile_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_individu_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_kelompok_view.dart';
 
@@ -61,6 +62,11 @@ class AppPages {
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
+      binding: AuthUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.STUDENT_PROFILE,
+      page: () => const StudentProfileView(),
       binding: AuthUsersBinding(),
     ),
     GetPage(

@@ -10,31 +10,57 @@ import 'app/routes/app_pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   FirebaseAuth auth = FirebaseAuth.instance;
-
   await GetStorage.init();
 
-  runApp( 
-    StreamBuilder<User?>(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final GetStorage box = GetStorage();
+    
+    return StreamBuilder<User?>(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SplashScreen();
         }
-        return GetMaterialApp(
-          title: "Application",
-          initialRoute: snapshot.data != null && snapshot.data!.emailVerified == true ? Routes.HOME : Routes.LOGIN,
-          getPages: AppPages.routes,
-        );
-      }
-    ),
-  );
+        if (snapshot.data != null && snapshot.data!.emailVerified == true) {
+          String? role = box.read("role");
+          String initialRoute;
+
+          if (role == "admin") {
+            initialRoute = Routes.HOME;
+          } else if (role == "student") {
+            initialRoute = Routes.STUDENT_HOME;
+          } else {
+            initialRoute = Routes.LOGIN; // Fallback to login if role is unknown
+          }
+
+          return GetMaterialApp(
+            title: "Application",
+            initialRoute: initialRoute,
+            getPages: AppPages.routes,
+          );
+        } else {
+          return GetMaterialApp(
+            title: "Application",
+            initialRoute: Routes.LOGIN,
+            getPages: AppPages.routes,
+          );
+        }
+      },
+    );
+  }
 }

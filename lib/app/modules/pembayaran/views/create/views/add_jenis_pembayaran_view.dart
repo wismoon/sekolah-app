@@ -54,18 +54,18 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
                       _buildRadioButton(
                         label: 'REGULAR',
                         value: 'REGULAR',
-                        groupValue: controller.selectedValue.value,
+                        groupValue: controller.pembayaranValue.value,
                         onChanged: (String value) {
-                            controller.selectedValue.value = value;
+                            controller.pembayaranValue.value = value;
                         }
                       ),
                       const SizedBox(width: 16),
                       _buildRadioButton(
                         label: 'NON REGULAR',
                         value: 'NON REGULAR',
-                        groupValue: controller.selectedValue.value,
+                        groupValue: controller.pembayaranValue.value,
                         onChanged: (String value) {
-                            controller.selectedValue.value = value;
+                            controller.pembayaranValue.value = value;
                         }
                       ),
                     ],
@@ -109,7 +109,7 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
                         nama: controller.nameJenis.text,
                         kode: controller.kodeJenis.text,
                         pembayaran: controller
-                            .selectedValue.value, // REGULAR or NON REGULAR
+                            .pembayaranValue.value, // REGULAR or NON REGULAR
                         keterangan: controller.commentJenis.text,
                       );
                       controller.createJenisPembayaran(jenisPembayaran);

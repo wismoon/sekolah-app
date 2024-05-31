@@ -15,8 +15,14 @@ class PeriodeEndpoints {
   static const String periodePembayaran = '/transaksi/periodePembayaran';
 }
 
+class InvoiceEndpoints {
+  static const String invoicePembayaran = '/pembayaran/invoice';
+  static const String invoiceBulkPembayaran = '/pembayaran/invoiceBulk';
+}
+
 class AuthConstants {
   static const String bearerToken = 'client-eBFdeAc2VRpFezqK';
+  
 }
 
 // class AuthEndpoints {

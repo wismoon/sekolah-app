@@ -8,6 +8,8 @@ class BiayaPembayaranController extends GetxController {
   var nameBiaya = TextEditingController();
   var selectedJenis = ''.obs;
   var nameStudi = TextEditingController();
+  var nameSemester = TextEditingController();
+  var nameTahunAngkatan = TextEditingController();
   var biaya = TextEditingController();
 
   final BiayaPembayaranService _service = BiayaPembayaranService();
@@ -23,6 +25,8 @@ class BiayaPembayaranController extends GetxController {
       nameBiaya.text = arguments['nama'] ?? '';
       selectedJenis.value = arguments['jenis'] ?? '';
       nameStudi.text = arguments['programStudi'] ?? '';
+      nameSemester.text = arguments['semester'] ?? '';
+      nameTahunAngkatan.text = arguments['tahunAngkatan'] ?? '';
       biaya.text = arguments['biaya'] ?? '';
     }
     fetchBiayaPembayaran();
@@ -33,6 +37,8 @@ class BiayaPembayaranController extends GetxController {
   void onClose() {
     nameBiaya.dispose();
     nameStudi.dispose();
+    nameSemester.dispose();
+    nameTahunAngkatan.dispose();
     biaya.dispose();
     super.onClose();
   }
@@ -62,6 +68,8 @@ class BiayaPembayaranController extends GetxController {
       Get.snackbar('Success', 'Biaya Pembayaran created successfully');
       nameBiaya.clear();
       nameStudi.clear();
+      nameSemester.clear();
+      nameTahunAngkatan.clear();
       biaya.clear();
       selectedJenis.value;
     } catch (e) {
@@ -124,6 +132,8 @@ class BiayaPembayaranController extends GetxController {
                               'nama': pembayaran.nama,
                               'jenis': pembayaran.jenis,
                               'programStudi': pembayaran.programStudi,
+                              'semester': pembayaran.semester,
+                              'tahunAngkatan': pembayaran.tahunAngkatan,
                               'biaya': pembayaran.biaya
                             },
                           );
