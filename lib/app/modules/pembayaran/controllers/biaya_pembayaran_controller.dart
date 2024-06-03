@@ -85,7 +85,7 @@ class BiayaPembayaranController extends GetxController {
     isBusy(true);
     try {
       await _service.deleteBiayaPembayaran(id);
-      Get.snackbar('Success', 'Jenis Pembayaran deleted successfully');
+      Get.snackbar('Success', 'Biaya Pembayaran deleted successfully');
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -145,8 +145,8 @@ class BiayaPembayaranController extends GetxController {
                     ),
                     ElevatedButton(
                       onPressed: ()  {
-                        deleteBiayaPembayaran(pembayaran.id!);
                         Navigator.pop(context);
+                        showDeleteConfirmation(context, pembayaran);
                       },
                       child: const Text('Delete'),
                       style: ElevatedButton.styleFrom(
@@ -158,6 +158,34 @@ class BiayaPembayaranController extends GetxController {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  
+  void showDeleteConfirmation(BuildContext context, Biayapembayaran pembayaran) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete ${pembayaran.nama}?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                deleteBiayaPembayaran(pembayaran.id!);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );

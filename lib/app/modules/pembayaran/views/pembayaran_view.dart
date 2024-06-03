@@ -12,22 +12,22 @@ class PembayaranView extends GetView<PembayaranController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PembayaranView'),
+        title: const Text('Pembayaran'),
         centerTitle: true,
       ),
       body: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              menu_custom2(title: "Jenis Pembayaran", bgColor: [Colors.black, Colors.amber], imageUrl: "Tehe.png", routeName: Routes.Jenis_PEMBAYARAN,),
+              MenuCustom2(title: "Jenis Pembayaran", imageUrl: "textBox.png", routeName: Routes.Jenis_PEMBAYARAN,),
               SizedBox(
                 height: 20,
               ),
-              menu_custom2(title: "Biaya Pembayaran", bgColor: [Colors.black, Colors.amber], imageUrl: "Tehe.png", routeName: Routes.Biaya_PEMBAYARAN),
+              MenuCustom2(title: "Biaya Pembayaran",  imageUrl: "invoice.png", routeName: Routes.Biaya_PEMBAYARAN),
               SizedBox(
                 height: 20,
               ),
-              menu_custom2(title: "Periode Pembayaran", bgColor: [Colors.black, Colors.amber], imageUrl: "Tehe.png",routeName: Routes.Periode_PEMBAYARAN),
+              MenuCustom2(title: "Periode Pembayaran", imageUrl: "calendar.png",routeName: Routes.Periode_PEMBAYARAN),
               SizedBox(
                 height: 20,
               ),

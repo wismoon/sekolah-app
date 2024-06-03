@@ -40,9 +40,7 @@ class ProfileController extends GetxController {
 
   void updateProfile() async {
     if (emailC.text.isNotEmpty &&
-        nameC.text.isNotEmpty &&
-        yearC.text.isNotEmpty &&
-        nimC.text.isNotEmpty) {
+        nameC.text.isNotEmpty) {
       try {
         isLoading.value = true;
         String uid = auth.currentUser!.uid;

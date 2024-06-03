@@ -10,7 +10,7 @@ class StudentProfileView extends GetView<StudentProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('StudentProfileView'),
+        title: const Text('Student Profile'),
         centerTitle: true,
       ),
       body: FutureBuilder<Map<String, dynamic>?>(

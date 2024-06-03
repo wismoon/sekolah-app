@@ -33,14 +33,14 @@ class HomeView extends GetView<HomeController> {
             children: [
               MenuCustom(
                 title: "Tagihan",
-                bgColor: Colors.white,
-                imageUrl: "Tehe.png",
+                bgColor: Colors.green,
+                imageUrl: "bill2.png",
                 routeName: Routes.TAGIHAN,
               ),
               MenuCustom(
                 title: "Pembayaran",
-                bgColor: Colors.white,
-                imageUrl: "Tehe.png",
+                bgColor: Colors.green,
+                imageUrl: "bill.png",
                 routeName: Routes.PEMBAYARAN,
               ),
             ],

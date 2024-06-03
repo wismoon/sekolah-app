@@ -5,6 +5,31 @@ import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:http/http.dart' as http;
 
 class InvoiceService {
+  Future<List<Invoice>> fetchInvoicePembayaran() async {
+    final response = await http.get(
+      Uri.parse(
+          '${BaseUrlConstants.baseUrl}${InvoiceEndpoints.invoicePembayaran}'),
+      headers: {
+        'Authorization': 'Bearer ${AuthConstants.bearerToken}',
+      },
+    );
+
+    print('API Response: ${response.body}');
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      var data = jsonResponse['data']['invoice'];
+      if (data != null) {
+        return data
+            .map<Invoice>((item) => Invoice.fromJson(item))
+            .toList();
+      } else {
+        throw Exception('Data is null');
+      }
+    } else {
+      throw Exception('Failed to load jenis pembayaran');
+    }
+  }
 
   Future<void> createInvoicePembayaran(Invoice invoicePembayaran) async {
     final response = await http.post(

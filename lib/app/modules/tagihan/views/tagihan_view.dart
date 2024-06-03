@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 
 import '../controllers/tagihan_controller.dart';
+import '../../../core/component/invoice_card.dart';
 
 class TagihanView extends GetView<TagihanController> {
   const TagihanView({Key? key}) : super(key: key);
@@ -11,10 +12,25 @@ class TagihanView extends GetView<TagihanController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TagihanView'),
+        title: const Text('Tagihan'),
         centerTitle: true,
       ),
-      body: const Center(),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (controller.tagihanList.isEmpty) {
+          return Center(child: Text("No tagihan data available"));
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(16),
+          itemCount: controller.tagihanList.length,
+          itemBuilder: (context, index) {
+            final tagihan = controller.tagihanList[index];
+            return InvoiceCard(invoice: tagihan);
+          },
+        );
+      }),
       floatingActionButton: Obx(() => Stack(
             children: [
               if (controller.showAdditionalButtons.value)

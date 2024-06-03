@@ -14,7 +14,7 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('AddBiayaPembayaranView'),
+          title: const Text('Tambah Biaya Pembayaran'),
           centerTitle: true,
         ),
         body: Padding(

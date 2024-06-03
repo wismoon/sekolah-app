@@ -1,34 +1,33 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; // Import Get package for navigation
 
-
-class menu_custom2 extends StatelessWidget {
-  const menu_custom2({
-    super.key,
+class MenuCustom2 extends StatelessWidget {
+  const MenuCustom2({
+    Key? key,
     required this.title,
-    required this.bgColor,
+    // required this.bgColor,
     required this.imageUrl,
-    required this.routeName
-  });
+    required this.routeName,
+  }) : super(key: key); // Add key parameter to the constructor
 
   final String title;
-  final List<Color> bgColor;
+  // final List<Color> bgColor;
   final String imageUrl;
   final String routeName;
-  
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(routeName);
+        Get.toNamed(
+            routeName); // Navigate to the specified routeName when tapped
       },
       borderRadius: BorderRadius.circular(20),
       child: SizedBox(
-        width: 250,
-        height: 70,
+        width: 300,
+        height: 93,
         child: Stack(
           children: [
             Card(
@@ -36,34 +35,38 @@ class menu_custom2 extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: Container(
-                width: 250,
-                height: 50,
-                padding: const EdgeInsets.only(left: 40, bottom: 15),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(title),
+                width: 300,
+                height: 70,
+                padding: const EdgeInsets.only(left: 40),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'YourFontFamily',
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
             Positioned(
               left: 0,
               top: 0,
-              child: Stack(
-                children: [Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: bgColor),
-                        border: Border.all(
-                          width: 5,
-                          color: Colors.transparent
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: _imageUrl(imageUrl)
-                    ),]
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.topCenter,
+                  //   end: Alignment.bottomCenter,
+                  //   colors: bgColor,
+                  // ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: _imageUrl(
+                    imageUrl), // Call the _imageUrl method to load the image
               ),
             ),
           ],
@@ -71,8 +74,11 @@ class menu_custom2 extends StatelessWidget {
       ),
     );
   }
-}
 
-_imageUrl (String imageName){
-  return Image.asset("images/$imageName", fit: BoxFit.cover,);
+  Widget _imageUrl(String imageName) {
+    return Image.asset(
+      "images/$imageName",
+      fit: BoxFit.cover,
+    );
+  }
 }

@@ -14,7 +14,7 @@ class AddPeriodePembayaranView extends GetView<PeriodePembayaranController> {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AddPeriodePembayaranView'),
+        title: const Text('Tambah Periode Pembayaran'),
         centerTitle: true,
       ),
       body:ListView(

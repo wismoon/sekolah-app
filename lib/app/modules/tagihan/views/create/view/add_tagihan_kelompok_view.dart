@@ -17,7 +17,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('AddTagihanKelompokView'),
+          title: const Text('Tambah Tagihan Kelompok'),
           centerTitle: true,
         ),
         body: ListView(

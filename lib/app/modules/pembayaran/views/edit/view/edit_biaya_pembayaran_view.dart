@@ -20,7 +20,7 @@ class EditBiayaPembayaranView extends GetView<BiayaPembayaranController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EditBiayaPembayaranView'),
+        title: const Text('Edit Biaya Pembayaran'),
         centerTitle: true,
       ),
       body: ListView(

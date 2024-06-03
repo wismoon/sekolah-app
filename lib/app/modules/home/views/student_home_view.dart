@@ -10,7 +10,7 @@ class StudentHomeView extends GetView<StudentHomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('StudentHomeView'),
+        title: const Text('Student Home'),
         centerTitle: true,
         actions: [
           IconButton(

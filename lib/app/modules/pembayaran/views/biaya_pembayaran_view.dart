@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/biaya_pembayaran_controller.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
+import '../../../core/component/biaya_pembayaran_card.dart';
 
 class BiayaPembayaranView extends GetView<BiayaPembayaranController> {
   final BiayaPembayaranController controller =
@@ -13,60 +13,43 @@ class BiayaPembayaranView extends GetView<BiayaPembayaranController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Biaya Pembayaran View'),
+        title: const Text('Biaya Pembayaran'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Obx(
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(
               () {
                 if (controller.isLoading.value) {
                   return Center(child: CircularProgressIndicator());
                 }
-                return DataTable(
-                  columns: const <DataColumn>[
-                    DataColumn(label: Expanded(child: Text("No"))),
-                    DataColumn(label: Expanded(child: Text("Kode"))),
-                    DataColumn(label: Expanded(child: Text("Nama Pembayaran"))),
-                    DataColumn(label: Expanded(child: Text("Jenis Pembayaran"))),
-                  ],
-                  rows: controller.biayaPembayaranList.map((pembayaran) {
-                    return _buildDataRow(context, pembayaran);
-                  }).toList(),
+                return ListView.builder(
+                  itemCount: controller.biayaPembayaranList.length,
+                  itemBuilder: (context, index) {
+                    return BiayaPembayaranCard(
+                      pembayaran: controller.biayaPembayaranList[index],
+                      onTap: () => controller.showBottomSheet(
+                        context,
+                        controller.biayaPembayaranList[index],
+                      ),
+                      onDelete: () => controller.showDeleteConfirmation(
+                        context,
+                        controller.biayaPembayaranList[index],
+                      ),
+                    );
+                  },
                 );
               },
             ),
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Get.toNamed(Routes.ADD_Biaya_PEMBAYARAN),
-          label: const Text("add"),
-          icon: const Icon(Icons.add)),
-    );
-  }
-
-  DataRow _buildDataRow(BuildContext context, Biayapembayaran pembayaran) {
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(InkWell(
-          onTap: () => controller.showBottomSheet(context, pembayaran),
-          child: Text(pembayaran.id.toString()),
-        )),
-        DataCell(InkWell(
-          onTap: () => controller.showBottomSheet(context, pembayaran),
-          child: Text(pembayaran.nama  ?? ''),
-        )),
-        DataCell(InkWell(
-          onTap: () => controller.showBottomSheet(context, pembayaran),
-          child: Text(pembayaran.jenis  ?? ''),
-        )),
-        DataCell(InkWell(
-          onTap: () => controller.showBottomSheet(context, pembayaran),
-          child: Text(pembayaran.biaya  ?? ''),
-        )),
-      ],
+        onPressed: () => Get.toNamed(Routes.ADD_Biaya_PEMBAYARAN),
+        label: const Text("Add"),
+        icon: const Icon(Icons.add),
+      ),
     );
   }
 }

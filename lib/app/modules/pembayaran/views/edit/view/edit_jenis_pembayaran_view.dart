@@ -17,7 +17,7 @@ class EditJenisPembayaranView extends GetView<JenisPembayaranController> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('EditJenisPembayaranView'),
+          title: const Text('Edit Jenis Pembayaran'),
           centerTitle: true,
         ),
         body: Obx(() => ListView(

@@ -17,7 +17,7 @@ class EditPeriodePembayaranView extends GetView<PeriodePembayaranController> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('EditPeriodePembayaranView'),
+          title: const Text('Edit Periode Pembayaran'),
           centerTitle: true,
         ),
         body: ListView(padding: EdgeInsets.all(20), children: [

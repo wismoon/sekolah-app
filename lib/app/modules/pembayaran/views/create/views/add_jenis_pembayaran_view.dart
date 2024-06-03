@@ -11,7 +11,7 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('AddJenisPembayaranView'),
+          title: const Text('Tambah Jenis Pembayaran'),
           centerTitle: true,
         ),
         body: ListView(
@@ -79,20 +79,6 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide(
                     color: Colors.grey,
-                    width: 3.0,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                    width: 3.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(
-                    color: Colors.blue,
                     width: 3.0,
                   ),
                 ),

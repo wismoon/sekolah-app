@@ -10,7 +10,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProfileView'),
+        title: const Text('Profile'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -32,9 +32,6 @@ class ProfileView extends GetView<ProfileController> {
             } else {
               controller.emailC.text = snapshot.data!["email"];
               controller.nameC.text = snapshot.data!["nama"];
-              controller.nimC.text = snapshot.data!["nim"];
-              controller.yearC.text = snapshot.data!["tahun-angkatan"];
-              // controller.passwordC.text = snapshot.data!["password"];
               return ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
@@ -46,32 +43,6 @@ class ProfileView extends GetView<ProfileController> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email),
                         labelText: "Nama",
-                        border: OutlineInputBorder()),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    autocorrect: false,
-                    controller: controller.nimC,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.numbers),
-                        labelText: "Nim",
-                        border: OutlineInputBorder()),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    autocorrect: false,
-                    controller: controller.yearC,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.numbers),
-                        labelText: "Tahun Angkatan",
                         border: OutlineInputBorder()),
                   ),
                   const SizedBox(

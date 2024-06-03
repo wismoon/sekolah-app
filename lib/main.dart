@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sekolah_app/app/core/constant/app_theme.dart';
 import 'package:sekolah_app/app/modules/Splash/splash.dart';
 
 import 'app/routes/app_pages.dart';
@@ -16,7 +17,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseAuth auth = FirebaseAuth.instance;
   await GetStorage.init();
 
   runApp(MyApp());
@@ -50,12 +50,14 @@ class MyApp extends StatelessWidget {
 
           return GetMaterialApp(
             title: "Application",
+            theme: AppTheme.lightTheme,
             initialRoute: initialRoute,
             getPages: AppPages.routes,
           );
         } else {
           return GetMaterialApp(
             title: "Application",
+            theme: AppTheme.lightTheme,
             initialRoute: Routes.LOGIN,
             getPages: AppPages.routes,
           );

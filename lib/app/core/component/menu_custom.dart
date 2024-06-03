@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class MenuCustom extends StatelessWidget {
   const MenuCustom({
-    super.key,
+    Key? key,
     required this.title,
     required this.bgColor,
     required this.imageUrl,
-    required this.routeName
-  });
+    required this.routeName,
+  }) : super(key: key);
 
   final String title;
-  final Color bgColor;
+  final dynamic bgColor;
   final String imageUrl;
   final String routeName;
-  
 
   @override
   Widget build(BuildContext context) {
-    
     return InkWell(
       onTap: () {
         Get.toNamed(routeName);
@@ -32,7 +29,7 @@ class MenuCustom extends StatelessWidget {
           children: [
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Container(
                 width: 120,
@@ -44,14 +41,18 @@ class MenuCustom extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(right: 0, child: Container(
-              height: 84,
-              width: 84,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(20)
+            Positioned(
+              right: 0,
+              child: Container(
+                height: 84,
+                width: 84,
+                decoration: BoxDecoration(
+                  color: bgColor is Color ? bgColor : null, // Check if bgColor is Color
+                  gradient: bgColor is List<Color> ? LinearGradient(colors: bgColor) : null, // Check if bgColor is List<Color>
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: _imageUrl(imageUrl),
               ),
-              child: _imageUrl(imageUrl)),
             ),
           ],
         ),
@@ -60,6 +61,6 @@ class MenuCustom extends StatelessWidget {
   }
 }
 
-_imageUrl (String imageName){
+Widget _imageUrl(String imageName) {
   return Image.asset("images/$imageName", fit: BoxFit.fill);
 }

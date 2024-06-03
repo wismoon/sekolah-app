@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:sekolah_app/app/core/constant/app_theme.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/jenis_pembayaran_model.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 import 'package:sekolah_app/app/services/jenis_pembayaran_service.dart';
@@ -15,6 +17,8 @@ class JenisPembayaranController extends GetxController {
 
   final JenisPembayaranService _service = JenisPembayaranService();
   var jenisPembayaranList = <JenisPembayaran>[].obs;
+  var filteredPembayaranList = <JenisPembayaran>[].obs;
+  var selectedFilter = 'All'.obs;
 
   var isBusy = false.obs;
   var isLoading = false.obs;
@@ -29,6 +33,7 @@ class JenisPembayaranController extends GetxController {
       commentJenis.text = arguments['keterangan'] ?? '';
     }
     fetchJenisPembayaran();
+    ever(selectedFilter, (_) => filterPembayaranList());
     super.onInit();
   }
 
@@ -45,14 +50,25 @@ class JenisPembayaranController extends GetxController {
       isLoading(true);
       var jenisPembayaran = await _service.fetchJenisPembayaran();
       if (jenisPembayaran.isEmpty) {
-        Get.snackbar('Data Error', 'Failed to load data because is Empty');
+        Get.snackbar(
+          'Data Error',
+          'Failed to load data because it is empty',
+          backgroundColor: AppColors.errorColor,
+          colorText: Colors.white,
+        );
       } else {
         jenisPembayaranList.value = jenisPembayaran;
-        print(
-            "Fetched Jenis Pembayaran List: ${jenisPembayaranList.map((e) => e.toJson()).toList()}");
+        filterPembayaranList();
+        // print(
+        //     "Fetched Jenis Pembayaran List: ${jenisPembayaranList.map((e) => e.toJson()).toList()}");
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -61,8 +77,18 @@ class JenisPembayaranController extends GetxController {
   JenisPembayaran? getJenisPembayaranByNama(String nama) {
     var jenis =
         jenisPembayaranList.firstWhereOrNull((jenis) => jenis.nama == nama);
-    print("Selected Jenis Pembayaran for '$nama': ${jenis?.toJson()}");
+    // print("Selected Jenis Pembayaran for '$nama': ${jenis?.toJson()}");
     return jenis;
+  }
+
+  void filterPembayaranList() {
+    if (selectedFilter.value == 'All') {
+      filteredPembayaranList.value = jenisPembayaranList;
+    } else {
+      filteredPembayaranList.value = jenisPembayaranList
+          .where((pembayaran) => pembayaran.pembayaran == selectedFilter.value)
+          .toList();
+    }
   }
 
   void updateJenisPembayaran(int id, String? id_akun) async {
@@ -82,10 +108,20 @@ class JenisPembayaranController extends GetxController {
           'Data being sent for update: ${jsonEncode(jenisPembayaran.toJson())}');
       await _service.updateJenisPembayaran(jenisPembayaran, id_akun);
 
-      Get.snackbar('Success', 'Jenis Pembayaran updated successfully');
+      Get.snackbar(
+        'Success',
+        'Jenis Pembayaran updated successfully',
+        backgroundColor: AppColors.successColor,
+        colorText: Colors.white,
+      );
     } catch (e) {
       print('Error updating jenis pembayaran: $e');
-      Get.snackbar('Error', 'Failed to update data: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to update data: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isBusy(false);
     }
@@ -97,14 +133,24 @@ class JenisPembayaranController extends GetxController {
     try {
       await _service.createJenisPembayaran(jenisPembayaran);
       print('Jenis Pembayaran created successfully');
-      Get.snackbar('Success', 'Jenis Pembayaran created successfully');
+      Get.snackbar(
+        'Success',
+        'Jenis Pembayaran created successfully',
+        backgroundColor: AppColors.successColor,
+        colorText: Colors.white,
+      );
       nameJenis.clear();
       kodeJenis.clear();
       commentJenis.clear();
       pembayaranValue.value;
     } catch (e) {
       print('Error: $e');
-      Get.snackbar('Error', e.toString());
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isBusy.value = false;
     }
@@ -115,9 +161,19 @@ class JenisPembayaranController extends GetxController {
     isBusy(true);
     try {
       await _service.deleteJenisPembayaran(id);
-      Get.snackbar('Success', 'Jenis Pembayaran deleted successfully');
+      Get.snackbar(
+        'Success',
+        'Jenis Pembayaran deleted successfully',
+        backgroundColor: AppColors.successColor,
+        colorText: Colors.white,
+      );
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isBusy(false);
     }
@@ -138,7 +194,6 @@ class JenisPembayaranController extends GetxController {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('No: ${pembayaran.id}', style: TextStyle(fontSize: 20)),
                 Text('Kode: ${pembayaran.kode}',
                     style: TextStyle(fontSize: 20)),
                 Text('Nama Pembayaran: ${pembayaran.nama}',
@@ -166,19 +221,30 @@ class JenisPembayaranController extends GetxController {
                             },
                           );
                         } catch (e) {
-                          Get.snackbar('Error', 'Failed to load data: $e');
+                          Get.snackbar(
+                            'Error',
+                            e.toString(),
+                            backgroundColor: AppColors.errorColor,
+                            colorText: Colors.white,
+                          );
                         }
                       },
                       child: const Text('Edit'),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        deleteJenisPembayaran(pembayaran.id!);
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Delete'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: AppColors
+                            .deleteColor, // Use the custom delete color
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showDeleteConfirmation(context, pembayaran);
+                      },
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -186,6 +252,34 @@ class JenisPembayaranController extends GetxController {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void showDeleteConfirmation(
+      BuildContext context, JenisPembayaran pembayaran) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete ${pembayaran.nama}?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                deleteJenisPembayaran(pembayaran.id!);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );

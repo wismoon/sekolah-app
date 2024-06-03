@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
@@ -30,7 +31,10 @@ class IntroductionPageView extends GetView {
         next: const Text("Next"),
         done: const Text("Login", style: TextStyle(fontWeight: FontWeight.w700)),
         onDone: () {
+          final GetStorage box = GetStorage();
+          box.write("hasSeenIntroduction", true);
           Get.offAllNamed(Routes.LOGIN);
+          
         },
         dotsDecorator: DotsDecorator(
           size: const Size.square(10.0),

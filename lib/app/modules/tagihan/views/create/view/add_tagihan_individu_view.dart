@@ -18,7 +18,7 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('AddTagihanIndividuView'),
+          title: const Text('Tambah Tagihan Individu'),
           centerTitle: true,
         ),
         body: ListView(
