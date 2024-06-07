@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/component/invoice_card_siswa.dart';
 import 'package:sekolah_app/app/modules/home/controllers/student_home_controller.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 
@@ -18,12 +19,22 @@ class StudentHomeView extends GetView<StudentHomeController> {
               icon: Icon(Icons.person_4_rounded))
         ],
       ),
-      body: const Center(
-        child: Text(
-          'StudentHomeView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (controller.invoiceList.isEmpty) {
+          return Center(child: Text("No payment data available"));
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(16),
+          itemCount: controller.invoiceList.length,
+          itemBuilder: (context, index) {
+            final payment = controller.invoiceList[index];
+            return InvoiceCardSiswa(invoice: payment);
+          },
+        );
+      }),
     );
   }
 }

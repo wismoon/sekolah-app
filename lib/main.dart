@@ -39,11 +39,13 @@ class MyApp extends StatelessWidget {
         if (snapshot.data != null && snapshot.data!.emailVerified == true) {
           String? role = box.read("role");
           String initialRoute;
+          // Map<String, String> parameters = {};
 
           if (role == "admin") {
             initialRoute = Routes.HOME;
           } else if (role == "student") {
             initialRoute = Routes.STUDENT_HOME;
+            // parameters = {'nim': box.read("nim") ?? ''};
           } else {
             initialRoute = Routes.LOGIN; // Fallback to login if role is unknown
           }

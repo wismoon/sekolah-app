@@ -42,8 +42,6 @@ class InvoiceService {
       body: jsonEncode(invoicePembayaran.toJson()),
     );
 
-    // print(response.body);
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       // Request was successful, no need to throw an exception
       print('Invoice Pembayaran created successfully');
@@ -86,4 +84,28 @@ class InvoiceService {
   Future<void> deletePembayaran(int id) async {
     // Code to delete a pembayaran
   }
+
+  Future<List<Invoice>> fetchStudentInvoice(String nim) async {
+    final response = await http.get(
+      Uri.parse('${BaseUrlConstants.baseUrl}${InvoiceEndpoints.invoicePembayaran}?nim=$nim'),
+      headers: {
+        'Authorization': 'Bearer ${AuthConstants.bearerToken}',
+      },
+    );
+
+    // print('API Response: ${response.body}');
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      var data = jsonResponse['data']['invoice'];
+      if (data != null) {
+        return data.map<Invoice>((item) => Invoice.fromJson(item)).toList();
+      } else {
+        throw Exception('Data is null');
+      }
+    } else {
+      throw Exception('Failed to load student payments');
+    }
+  }
+  
 }

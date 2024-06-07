@@ -4,11 +4,8 @@ import 'package:sekolah_app/app/services/invoice_service.dart';
 
 class TagihanController extends GetxController {
   var showAdditionalButtons = false.obs;
-
   final InvoiceService _service = InvoiceService();
   var tagihanList = <Invoice>[].obs;
-
-  var isBusy = false.obs;
   var isLoading = false.obs;
 
   @override
@@ -36,11 +33,6 @@ class TagihanController extends GetxController {
   }
 
   // Method to toggle the visibility
-  void toggleButtons() {
-    showAdditionalButtons.value = !showAdditionalButtons.value;
-  }
-  
-  void hideButtons() {
-    showAdditionalButtons.value = false;
-  }
+  void toggleButtons() => showAdditionalButtons.value = !showAdditionalButtons.value;
+  void hideButtons() => showAdditionalButtons.value = false;
 }

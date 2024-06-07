@@ -1,5 +1,5 @@
 class BaseUrlConstants {
-  static const String baseUrl = 'http://192.168.1.10:3350/api';
+  static const String baseUrl = 'http://192.168.1.12:3350/api';
   static const String contentTypeJson = 'application/json; charset=UTF-8';
 }
 
@@ -18,6 +18,7 @@ class PeriodeEndpoints {
 class InvoiceEndpoints {
   static const String invoicePembayaran = '/pembayaran/invoice';
   static const String invoiceBulkPembayaran = '/pembayaran/invoiceBulk';
+  static const String invoicePayment = '/pembayaran/create';
 }
 
 class AuthConstants {
