@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
@@ -42,8 +43,7 @@ class LoginController extends GetxController {
 
           if (docSiswa.exists) {
             // User found in the siswa collection
-            handleUserLogin(
-                "student", email, password, credential);
+            handleUserLogin("student", email, password, credential);
           } else {
             // User not found in both collections
             isLoading.value = false;
@@ -53,9 +53,14 @@ class LoginController extends GetxController {
       } on FirebaseAuthException catch (e) {
         isLoading.value = false;
         print(e.code);
-        if (e.code == 'user-not-found') {
-          Get.snackbar("Email Belum Terdaftar", "Email Anda Belum Terdaftar");
-        } else if (e.code == 'invalid-credential') {
+        if (e.code == 'invalid-credential') {
+          Get.snackbar(
+            "Email Belum Terdaftar",
+            "Email Anda Belum Terdaftar",
+            backgroundColor: AppColors.deleteColor,
+            colorText: Colors.white,
+          );
+        } else if (e.code == 'wrong-password') {
           errMsg("Password Anda Salah");
         }
       }
@@ -93,7 +98,7 @@ class LoginController extends GetxController {
         Get.offAllNamed(Routes.HOME);
       }
     } else {
-      print("email belum terverifikasi");
+      // print("email belum terverifikasi");
       Get.defaultDialog(
           title: "Belum terverifikasi",
           middleText: "Apakah anda ingin mengirimkan email verifikasi kembali?",

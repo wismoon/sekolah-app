@@ -14,7 +14,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
     final jenisPembayaranController = Get.put(JenisPembayaranController());
     final periodePembayaranController = Get.put(PeriodePembayaranController());
     final biayaPembayaranController = Get.put(BiayaPembayaranController());
-
+    double fieldWidth = MediaQuery.of(context).size.width - 40;
     return Scaffold(
         appBar: AppBar(
           title: const Text('Tambah Tagihan Kelompok'),
@@ -33,13 +33,14 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                   .toSet()
                   .toList();
               print("Available Tahun Angkatan: $tahunAngkatanList");
-              
+
               return DropdownSearch<String>(
                 items: tahunAngkatanList,
                 itemAsString: (String tahunAngkatan) => tahunAngkatan,
                 onChanged: (String? selectedTahunAngkatan) {
                   if (selectedTahunAngkatan != null) {
-                    controller.selectedTahunAngkatan.value = selectedTahunAngkatan;
+                    controller.selectedTahunAngkatan.value =
+                        selectedTahunAngkatan;
                     print("Selected Tahun Angkatan: $selectedTahunAngkatan");
                   }
                 },
@@ -79,7 +80,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          }),
+                          },width: fieldWidth / 2 - 12),
                       const SizedBox(width: 16),
                       _buildRadioButton(
                           label: 'Non Semester',
@@ -88,7 +89,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          }),
+                          },width: fieldWidth / 2 - 12),
                     ],
                   )),
             ),
@@ -244,6 +245,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
     required String label,
     required String value,
     required String groupValue,
+    required double width,
     required ValueChanged<String> onChanged,
   }) {
     return GestureDetector(
@@ -253,6 +255,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
           }
         },
         child: Container(
+          width: width,
           decoration: BoxDecoration(
             border: Border.all(
               color: groupValue == value ? Colors.blue : Colors.grey,
@@ -261,7 +264,6 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: EdgeInsets.all(4.0),
           child: Row(
             children: [
               Radio<String>(

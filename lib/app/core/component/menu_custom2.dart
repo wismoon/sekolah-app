@@ -58,11 +58,6 @@ class MenuCustom2 extends StatelessWidget {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  // gradient: LinearGradient(
-                  //   begin: Alignment.topCenter,
-                  //   end: Alignment.bottomCenter,
-                  //   colors: bgColor,
-                  // ),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: _imageUrl(

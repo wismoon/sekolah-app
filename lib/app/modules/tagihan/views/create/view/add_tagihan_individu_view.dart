@@ -15,7 +15,7 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
     final jenisPembayaranController = Get.put(JenisPembayaranController());
     final periodePembayaranController = Get.put(PeriodePembayaranController());
     final biayaPembayaranController = Get.put(BiayaPembayaranController());
-
+    double fieldWidth = MediaQuery.of(context).size.width - 40;
     return Scaffold(
         appBar: AppBar(
           title: const Text('Tambah Tagihan Individu'),
@@ -69,7 +69,8 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          }),
+                          },
+                          width: fieldWidth / 2 - 12),
                       const SizedBox(width: 16),
                       _buildRadioButton(
                           label: 'Non Semester',
@@ -78,7 +79,7 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          }),
+                          },width: fieldWidth / 2 - 12),
                     ],
                   )),
             ),
@@ -217,22 +218,23 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-                onPressed:controller.isLoading.value
-                  ? () {
-                      controller.createInvoicePembayaran();
-                      Navigator.pop(context);
-                    }
-                  : null,
+                onPressed: controller.isLoading.value
+                    ? () {
+                        controller.createInvoicePembayaran();
+                        Navigator.pop(context);
+                      }
+                    : null,
                 child:
                     Text(controller.isLoading.isFalse ? "Loading" : "Tambah")),
           ],
         ));
   }
-
+  
   Widget _buildRadioButton({
     required String label,
     required String value,
     required String groupValue,
+    required double width,
     required ValueChanged<String> onChanged,
   }) {
     return GestureDetector(
@@ -242,6 +244,7 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
           }
         },
         child: Container(
+          width: width,
           decoration: BoxDecoration(
             border: Border.all(
               color: groupValue == value ? Colors.blue : Colors.grey,
@@ -250,7 +253,6 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: EdgeInsets.all(4.0),
           child: Row(
             children: [
               Radio<String>(

@@ -107,5 +107,4 @@ class InvoiceService {
       throw Exception('Failed to load student payments');
     }
   }
-  
 }

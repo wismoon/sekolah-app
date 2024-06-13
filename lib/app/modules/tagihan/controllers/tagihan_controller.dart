@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:sekolah_app/app/services/invoice_service.dart';
 
@@ -19,20 +21,31 @@ class TagihanController extends GetxController {
       isLoading(true);
       var invoicePembayaran = await _service.fetchInvoicePembayaran();
       if (invoicePembayaran.isEmpty) {
-        Get.snackbar('Data Error', 'Failed to load data because is Empty');
+        Get.snackbar(
+          'Data Error',
+          'Failed to load data because is Empty',
+          backgroundColor: AppColors.errorColor,
+          colorText: Colors.white,
+        );
       } else {
         tagihanList.value = invoicePembayaran;
         print(
             "Fetched Jenis Pembayaran List: ${tagihanList.map((e) => e.toJson()).toList()}");
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
   }
 
   // Method to toggle the visibility
-  void toggleButtons() => showAdditionalButtons.value = !showAdditionalButtons.value;
+  void toggleButtons() =>
+      showAdditionalButtons.value = !showAdditionalButtons.value;
   void hideButtons() => showAdditionalButtons.value = false;
 }

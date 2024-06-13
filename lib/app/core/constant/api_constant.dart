@@ -1,5 +1,5 @@
 class BaseUrlConstants {
-  static const String baseUrl = 'http://192.168.1.12:3350/api';
+  static const String baseUrl = 'http://192.168.1.15:3350/api';
   static const String contentTypeJson = 'application/json; charset=UTF-8';
 }
 
@@ -18,15 +18,11 @@ class PeriodeEndpoints {
 class InvoiceEndpoints {
   static const String invoicePembayaran = '/pembayaran/invoice';
   static const String invoiceBulkPembayaran = '/pembayaran/invoiceBulk';
-  static const String invoicePayment = '/pembayaran/create';
+  static const String paymentCreate = '/pembayaran/create';
+  static const String paymentStatus = '/pembayaran/status';
 }
 
 class AuthConstants {
   static const String bearerToken = 'client-eBFdeAc2VRpFezqK';
   
 }
-
-// class AuthEndpoints {
-//   static const String login = '/auth/login';
-//   static const String register = '/auth/register';
-// }

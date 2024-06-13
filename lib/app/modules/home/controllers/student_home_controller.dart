@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 import 'package:sekolah_app/app/services/invoice_service.dart';
+import 'package:sekolah_app/app/services/payment_service.dart';
 
 class StudentHomeController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -24,7 +25,8 @@ class StudentHomeController extends GetxController {
     try {
       String uid = auth.currentUser?.uid ?? '';
       if (uid.isNotEmpty) {
-        DocumentSnapshot userDoc = await firestore.collection('siswa').doc(uid).get();
+        DocumentSnapshot userDoc =
+            await firestore.collection('siswa').doc(uid).get();
         if (userDoc.exists) {
           userNim.value = userDoc['nim'];
           fetchStudentInvoice(userNim.value);
@@ -36,7 +38,7 @@ class StudentHomeController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch user data: $e');
-    }finally {
+    } finally {
       isLoading(false);
     }
   }
@@ -58,6 +60,31 @@ class StudentHomeController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<Map<String, dynamic>> createPayment(String nomorPembayaran) async {
+    isLoading.value = true;
+    try {
+      final response = await PaymentService.createPayment(nomorPembayaran);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to create payment: $e');
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> checkPaymentStatus(String transactionId) async {
+  try {
+    Map<String, dynamic> statusResponse =
+          await PaymentService.getPaymentStatus(transactionId);
+      Get.snackbar(
+          'Payment Status', 'Status: ${statusResponse['transaction_status']}');
+  } catch (e) {
+    Get.snackbar('Error', 'Failed to get payment status: $e');
+    return null;
+  }
+}
 
   void logout() async {
     try {

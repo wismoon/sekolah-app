@@ -5,13 +5,11 @@ class MenuCustom extends StatelessWidget {
   const MenuCustom({
     Key? key,
     required this.title,
-    required this.bgColor,
     required this.imageUrl,
     required this.routeName,
   }) : super(key: key);
 
   final String title;
-  final dynamic bgColor;
   final String imageUrl;
   final String routeName;
 
@@ -34,10 +32,18 @@ class MenuCustom extends StatelessWidget {
               child: Container(
                 width: 120,
                 height: 137,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Text(title),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'YourFontFamily',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -47,8 +53,6 @@ class MenuCustom extends StatelessWidget {
                 height: 84,
                 width: 84,
                 decoration: BoxDecoration(
-                  color: bgColor is Color ? bgColor : null, // Check if bgColor is Color
-                  gradient: bgColor is List<Color> ? LinearGradient(colors: bgColor) : null, // Check if bgColor is List<Color>
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: _imageUrl(imageUrl),

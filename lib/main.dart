@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             initialRoute: initialRoute,
             getPages: AppPages.routes,
+            debugShowCheckedModeBanner: false,
           );
         } else {
           return GetMaterialApp(
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             initialRoute: Routes.LOGIN,
             getPages: AppPages.routes,
+            debugShowCheckedModeBanner: false,
           );
         }
       },

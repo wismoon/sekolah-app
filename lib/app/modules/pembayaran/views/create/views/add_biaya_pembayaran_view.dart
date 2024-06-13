@@ -9,7 +9,6 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
   const AddBiayaPembayaranView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    
     final jenisPembayaranController = Get.put(JenisPembayaranController());
 
     return Scaffold(
@@ -42,7 +41,8 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
                 value: controller.selectedJenis.value.isEmpty
                     ? null
                     : controller.selectedJenis.value,
-                items: jenisPembayaranController.jenisPembayaranList.map((jenis) {
+                items:
+                    jenisPembayaranController.jenisPembayaranList.map((jenis) {
                   return DropdownMenuItem<String>(
                     value: jenis.nama,
                     child: Text(jenis.nama!),
@@ -124,20 +124,40 @@ class AddBiayaPembayaranView extends GetView<BiayaPembayaranController> {
               onPressed: controller.isBusy.value
                   ? null
                   : () {
-                      Biayapembayaran biayapembayaran = Biayapembayaran(
-                        nama: controller.nameBiaya.text,
-                        jenis: controller.selectedJenis.value,
-                        programStudi: controller.nameStudi.text,
-                        semester: controller.nameSemester.text,
-                        tahunAngkatan: controller.nameTahunAngkatan.text,
-                        biaya: controller.biaya.text,
-                      );
-                      controller.createBiayaPembayaran(biayapembayaran);
-                      Navigator.pop(context);
+                      String? emptyField = _validateFields();
+                      if (emptyField == null) {
+                        Biayapembayaran biayapembayaran = Biayapembayaran(
+                          nama: controller.nameBiaya.text,
+                          jenis: controller.selectedJenis.value,
+                          programStudi: controller.nameStudi.text,
+                          semester: controller.nameSemester.text,
+                          tahunAngkatan: controller.nameTahunAngkatan.text,
+                          biaya: controller.biaya.text,
+                        );
+                        controller.createBiayaPembayaran(biayapembayaran);
+                        Navigator.pop(context);
+                      } else {
+                        Get.snackbar(
+                          'Error',
+                          '$emptyField cannot be empty',
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
                     },
-              child: Text(controller.isLoading.isFalse ? "Loading" : "Tambah"),
+              child: Text(controller.isLoading.isFalse ? "Tambah" : "Loading"),
             ),
           ]),
         ));
+  }
+
+  String? _validateFields() {
+    if (controller.nameBiaya.text.isEmpty) return 'Nama Biaya Pembayaran';
+    if (controller.selectedJenis.value.isEmpty) return 'Jenis Pembayaran';
+    if (controller.nameStudi.text.isEmpty) return 'Program Studi';
+    if (controller.nameSemester.text.isEmpty) return 'Semester';
+    if (controller.nameTahunAngkatan.text.isEmpty) return 'Tahun Angkatan';
+    if (controller.biaya.text.isEmpty) return 'Biaya Pembayaran';
+    return null;
   }
 }

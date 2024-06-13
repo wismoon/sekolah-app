@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:sekolah_app/app/models/student_model.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/jenis_pembayaran_controller.dart';
@@ -38,7 +39,12 @@ class TagihanKelompokController extends GetxController {
           .map((doc) => Student.fromDocumentSnapshot(doc))
           .toList();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch students: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to fetch students: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -53,64 +59,43 @@ class TagihanKelompokController extends GetxController {
 
     if (filteredStudents.isEmpty) {
       Get.snackbar(
-          'Error', 'No students found for the selected tahun angkatan');
+        'Error',
+        'No students found for the selected tahun angkatan',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
       return;
     }
     if (selectedJenis.value.isEmpty) {
-      Get.snackbar('Error', 'Please select jenis pembayaran');
+      Get.snackbar(
+        'Error',
+        'Please select jenis pembayaran',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
       return;
     }
     final jenisPembayaran =
         jenisPembayaranController.getJenisPembayaranByNama(selectedJenis.value);
 
     if (selectedPeriode.value.isEmpty) {
-      Get.snackbar('Error', 'Please select periode pembayaran');
+      Get.snackbar(
+        'Error',
+        'Please select periode pembayaran',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
       return;
     }
     if (selectedBiaya.value.isEmpty) {
-      Get.snackbar('Error', 'Please select biaya pembayaran');
+      Get.snackbar(
+        'Error',
+        'Please select biaya pembayaran',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
       return;
     }
-
-    // final List<Map<String, dynamic>> individuList = filteredStudents
-    //     .map((student) => {
-    //           "nim": student.nim,
-    //           "nama": student.nama,
-    //           "email": student.email,
-    //           "jurusan": student.jurusan,
-    //           "fakultas": student.fakultas,
-    //           "instansi": student.instansi,
-    //           "tahun_angkatan": student.tahunAngkatan,
-    //           "jenis_kelamin":
-    //               student.jenisKelamin ?? '', // Assuming you have this field
-    //           "tempat_lahir":
-    //               student.tempatLahir ?? '', // Assuming you have this field
-    //           "tanggal_lahir":
-    //               student.tanggalLahir ?? '', // Assuming you have this field
-    //         })
-    //     .toList();
-
-    // final firstStudent = filteredStudents.first;
-
-    // final invoicePembayaran = Invoice(
-    //     jenis_pembayaran: selectedJenis.value,
-    //     biaya_pembayaran: selectedBiaya.value,
-    //     nama_pembayaran: selectedPeriode.value,
-    //     idAkun: jenisPembayaran?.idAkun,
-    //     kode_pembayaran: jenisPembayaran?.kode,
-    //     keterangan: commentJenis.text,
-    //     nim: firstStudent.nim,
-    //     nama: firstStudent.nama,
-    //     program_studi: firstStudent.jurusan,
-    //     fakultas: firstStudent.fakultas,
-    //     instansi: firstStudent.instansi,
-    //     email: firstStudent.email,
-    //     telepon: firstStudent.nomorTelepon,
-    //     alamat: firstStudent.alamat,
-    //     kota: firstStudent.kota,
-    //     kodePos: firstStudent.kodePos,
-    //     negara: firstStudent.negara,
-    //     individu: individuList);
 
     for (var student in filteredStudents) {
       final invoicePembayaran = Invoice(
@@ -151,7 +136,12 @@ class TagihanKelompokController extends GetxController {
       isLoading(true);
       try {
         await _service.createInvoiceBulkPembayaran(invoicePembayaran);
-        Get.snackbar('Success', 'Invoice created successfully');
+        Get.snackbar(
+          'Success',
+          'Invoice created successfully',
+          backgroundColor: AppColors.successColor,
+          colorText: Colors.white,
+        );
       } catch (e) {
         print('Error: $e');
         Get.snackbar('Error', e.toString());

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_app/app/core/component/showBottomSheet_2.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 
 class InvoiceCard extends StatelessWidget {
@@ -11,7 +12,23 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => DraggableScrollableSheet(
+            expand: false,
+            builder: (context, scrollController) {
+              return SingleChildScrollView(
+                controller: scrollController,
+                child: InvoiceDetailSheet2(invoice: invoice),
+              );
+            },
+          ),
+        );
+      },
+      child: Card(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -26,6 +43,6 @@ class InvoiceCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

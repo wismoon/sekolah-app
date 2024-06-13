@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sekolah_app/app/routes/app_pages.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/services/biaya_pembayaran_service.dart';
 import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 
@@ -43,18 +43,27 @@ class BiayaPembayaranController extends GetxController {
     super.onClose();
   }
 
-
   void fetchBiayaPembayaran() async {
     try {
       isLoading(true);
       var biayaPembayaran = await _service.fetchBiayaPembayaran();
       if (biayaPembayaran.isEmpty) {
-        Get.snackbar('Data Error', 'Failed to load data because is Empty');
+        Get.snackbar(
+          'Data Error',
+          'Failed to load data because is Empty',
+          backgroundColor: AppColors.errorColor,
+          colorText: Colors.white,
+        );
       } else {
         biayaPembayaranList.value = biayaPembayaran;
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -65,7 +74,12 @@ class BiayaPembayaranController extends GetxController {
     try {
       await _service.createBiayaPembayaran(biayaPembayaran);
       print('Biaya Pembayaran created successfully');
-      Get.snackbar('Success', 'Biaya Pembayaran created successfully');
+      Get.snackbar(
+        'Success',
+        'Biaya Pembayaran created successfully',
+        backgroundColor: AppColors.successColor,
+        colorText: Colors.white,
+      );
       nameBiaya.clear();
       nameStudi.clear();
       nameSemester.clear();
@@ -74,7 +88,12 @@ class BiayaPembayaranController extends GetxController {
       selectedJenis.value;
     } catch (e) {
       print('Error: $e');
-      Get.snackbar('Error', e.toString());
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isBusy.value = false;
     }
@@ -85,109 +104,22 @@ class BiayaPembayaranController extends GetxController {
     isBusy(true);
     try {
       await _service.deleteBiayaPembayaran(id);
-      Get.snackbar('Success', 'Biaya Pembayaran deleted successfully');
+      Get.snackbar(
+        'Success',
+        'Biaya Pembayaran deleted successfully',
+        backgroundColor: AppColors.successColor,
+        colorText: Colors.white,
+      );
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isBusy(false);
     }
     fetchBiayaPembayaran();
-  }
-
-  void showBottomSheet(BuildContext context, Biayapembayaran pembayaran) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, // This is necessary for custom height
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor:
-              0.5, // Adjust the height factor to make it half of the screen height
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('No: ${pembayaran.id.toString()}', style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran.nama}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran.jenis}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Biaya Pembayaran: ${pembayaran.biaya}',
-                    style: TextStyle(fontSize: 20)),
-                const SizedBox(height: 20),
-                Spacer(), // Push the buttons to the bottom
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        try {
-                          Navigator.pop(context);
-                          Get.toNamed(
-                            Routes.EDIT_Biaya_PEMBAYARAN,
-                            arguments: {
-                              'id': pembayaran.id,
-                              // 'id_akun': pembayaran.id_akun,
-                              'nama': pembayaran.nama,
-                              'jenis': pembayaran.jenis,
-                              'programStudi': pembayaran.programStudi,
-                              'semester': pembayaran.semester,
-                              'tahunAngkatan': pembayaran.tahunAngkatan,
-                              'biaya': pembayaran.biaya
-                            },
-                          );
-                        } catch (e) {
-                          Get.snackbar('Error', 'Failed to load data: $e');
-                        }
-                      },
-                      child: const Text('Edit'),
-                    ),
-                    ElevatedButton(
-                      onPressed: ()  {
-                        Navigator.pop(context);
-                        showDeleteConfirmation(context, pembayaran);
-                      },
-                      child: const Text('Delete'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:Colors.red, 
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  
-  void showDeleteConfirmation(BuildContext context, Biayapembayaran pembayaran) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete ${pembayaran.nama}?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                deleteBiayaPembayaran(pembayaran.id!);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

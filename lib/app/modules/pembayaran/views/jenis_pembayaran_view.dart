@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/component/pembayaran_card.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
+import 'package:sekolah_app/app/models/jenis_pembayaran_model.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/jenis_pembayaran_controller.dart';
-import '../../../core/component/pembayaran_card.dart';
 
 class JenisPembayaranView extends GetView<JenisPembayaranController> {
-  final JenisPembayaranController controller =
-      Get.put(JenisPembayaranController());
+  // final JenisPembayaranController controller =
+  //     Get.put(JenisPembayaranController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +50,11 @@ class JenisPembayaranView extends GetView<JenisPembayaranController> {
                   itemBuilder: (context, index) {
                     return PembayaranCard(
                       pembayaran: controller.filteredPembayaranList[index],
-                      onTap: () => controller.showBottomSheet(
+                      onTap: () => _showBottomSheet(
                         context,
                         controller.filteredPembayaranList[index],
                       ),
-                      onDelete: () => controller.showDeleteConfirmation(
+                      onDelete: () => _showDeleteConfirmation(
                         context,
                         controller.filteredPembayaranList[index],
                       ),
@@ -69,6 +71,127 @@ class JenisPembayaranView extends GetView<JenisPembayaranController> {
         label: const Text("Add"),
         icon: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void _showBottomSheet(
+      BuildContext context, JenisPembayaran pembayaran) async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return FractionallySizedBox(
+          heightFactor: 0.5,
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Kode: ${pembayaran.kode}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Nama Pembayaran: ${pembayaran.nama}',
+                    style: TextStyle(fontSize: 20)),
+                Text('Jenis Pembayaran: ${pembayaran.pembayaran}',
+                    style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 20),
+                Spacer(),
+                Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            try {
+                              Navigator.pop(context);
+                              Get.toNamed(
+                                Routes.EDIT_Jenis_PEMBAYARAN,
+                                arguments: {
+                                  'id': pembayaran.id,
+                                  'id_akun': pembayaran.idAkun,
+                                  'kode': pembayaran.kode,
+                                  'nama': pembayaran.nama,
+                                  'pembayaran': pembayaran.pembayaran,
+                                  'keterangan': pembayaran.keterangan
+                                },
+                              );
+                            } catch (e) {
+                              Get.snackbar(
+                                'Error',
+                                e.toString(),
+                                backgroundColor: AppColors.errorColor,
+                                colorText: Colors.white,
+                              );
+                            }
+                          },
+                          child: const Text('Edit'),
+                        ),
+                      ),
+                      const SizedBox(height: 10), // Add space between buttons
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.deleteColor,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _showDeleteConfirmation(context, pembayaran);
+                          },
+                          child: const Text(
+                            'Delete',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(
+      BuildContext context, JenisPembayaran pembayaran) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content:
+              Text('Apakah anda yakin ingin menghapus ${pembayaran.nama}?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Hapus',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.deleteColor,
+              ),
+              onPressed: () {
+                controller.deleteJenisPembayaran(pembayaran.id!);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

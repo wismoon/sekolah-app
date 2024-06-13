@@ -10,7 +10,7 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    double widthDevice = Get.width;
+    // double widthDevice = Get.width;
     double heightDevice = Get.height;
 
     return Scaffold(
@@ -33,13 +33,11 @@ class HomeView extends GetView<HomeController> {
             children: [
               MenuCustom(
                 title: "Tagihan",
-                bgColor: Colors.green,
                 imageUrl: "bill2.png",
                 routeName: Routes.TAGIHAN,
               ),
               MenuCustom(
                 title: "Pembayaran",
-                bgColor: Colors.green,
                 imageUrl: "bill.png",
                 routeName: Routes.PEMBAYARAN,
               ),
@@ -47,22 +45,6 @@ class HomeView extends GetView<HomeController> {
           ),
           const SizedBox(
             height: 20,
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 50, left: 50, right: 50),
-            child: TextField(
-              autocorrect: false,
-              // controller: ,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                  suffixIcon: const Icon(Icons.search_rounded),
-                  hintText: "Cari Nama",
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50))),
-            ),
           ),
         ],
       ),

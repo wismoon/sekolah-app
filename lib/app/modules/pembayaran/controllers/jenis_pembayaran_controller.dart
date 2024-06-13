@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/jenis_pembayaran_model.dart';
-import 'package:sekolah_app/app/routes/app_pages.dart';
 import 'package:sekolah_app/app/services/jenis_pembayaran_service.dart';
 
 class JenisPembayaranController extends GetxController {
@@ -51,7 +50,7 @@ class JenisPembayaranController extends GetxController {
       if (jenisPembayaran.isEmpty) {
         Get.snackbar(
           'Data Error',
-          'Failed to load data because it is empty',
+          'Gagal menampilkan data karena data kosong',
           backgroundColor: AppColors.errorColor,
           colorText: Colors.white,
         );
@@ -177,110 +176,5 @@ class JenisPembayaranController extends GetxController {
       isBusy(false);
     }
     fetchJenisPembayaran();
-  }
-
-  void showBottomSheet(BuildContext context, JenisPembayaran pembayaran) async {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, // This is necessary for custom height
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor:
-              0.5, // Adjust the height factor to make it half of the screen height
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Kode: ${pembayaran.kode}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran.nama}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran.pembayaran}',
-                    style: TextStyle(fontSize: 20)),
-                const SizedBox(height: 20),
-                Spacer(), // Push the buttons to the bottom
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        try {
-                          Navigator.pop(context);
-                          Get.toNamed(
-                            Routes.EDIT_Jenis_PEMBAYARAN,
-                            arguments: {
-                              'id': pembayaran.id,
-                              'id_akun': pembayaran.idAkun,
-                              'kode': pembayaran.kode,
-                              'nama': pembayaran.nama,
-                              'pembayaran': pembayaran.pembayaran,
-                              'keterangan': pembayaran.keterangan
-                            },
-                          );
-                        } catch (e) {
-                          Get.snackbar(
-                            'Error',
-                            e.toString(),
-                            backgroundColor: AppColors.errorColor,
-                            colorText: Colors.white,
-                          );
-                        }
-                      },
-                      child: const Text('Edit'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors
-                            .deleteColor, // Use the custom delete color
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showDeleteConfirmation(context, pembayaran);
-                      },
-                      child: const Text(
-                        'Delete',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void showDeleteConfirmation(
-      BuildContext context, JenisPembayaran pembayaran) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete ${pembayaran.nama}?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                deleteJenisPembayaran(pembayaran.id!);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

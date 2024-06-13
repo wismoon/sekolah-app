@@ -12,13 +12,5 @@ class AppTheme {
       onSecondary: AppColors.onSecondaryColor,
       error: AppColors.errorColor,
     ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.primaryColor,
-      titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-      ),
-      iconTheme: IconThemeData(color: Colors.white),
-    ),
   );
 }
