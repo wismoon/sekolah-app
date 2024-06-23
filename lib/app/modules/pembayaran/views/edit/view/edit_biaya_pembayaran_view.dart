@@ -16,6 +16,8 @@ class EditBiayaPembayaranView extends GetView<BiayaPembayaranController> {
     controller.nameBiaya.text = arguments['nama'];
     controller.selectedJenis.value = arguments['jenis'];
     controller.nameStudi.text = arguments['programStudi'];
+    controller.nameStudi.text = arguments['semester'];
+    controller.nameStudi.text = arguments['tahunAngkatan'];
     controller.biaya.text = arguments['biaya']; 
 
     return Scaffold(
@@ -81,6 +83,34 @@ class EditBiayaPembayaranView extends GetView<BiayaPembayaranController> {
                   ),
                 ),
                 labelText: 'Program Studi',
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: controller.nameSemester,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 2.0,
+                  ),
+                ),
+                labelText: 'Semester',
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: controller.nameTahunAngkatan,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 2.0,
+                  ),
+                ),
+                labelText: 'Tahun Angkatan',
               ),
             ),
             SizedBox(height: 20),

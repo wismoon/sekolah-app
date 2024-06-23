@@ -229,14 +229,14 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
             SizedBox(height: 20),
             ElevatedButton(
                 onPressed: controller.isLoading.value
-                    ? () {
+                    ? null
+                    : () {
                         controller.createInvoiceBulkPembayaran(
                             controller.selectedTahunAngkatan.value);
                         Navigator.pop(context);
-                      }
-                    : null,
+                      },
                 child:
-                    Text(controller.isLoading.isFalse ? "Loading" : "Tambah")),
+                    Text(controller.isLoading.isFalse ? "Tambah" : "Loading")),
           ],
         ));
   }

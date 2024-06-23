@@ -1,0 +1,22 @@
+{
+    "transaction_time": "2024-06-18 14:44:24",
+    "custom_field1": "UIN SUSKA RIAU",
+    "custom_field2": "101992411760116045",
+    "custom_field3": "11760116045",
+    "gross_amount": "200000.00",
+    "currency": "IDR",
+    "order_id": "101992411760116045-1",
+    "payment_type": "qris",
+    "signature_key": "f38237d124776a44727162825e55dcc7522a58e15accedbe4563348d24a5f8815dc1de6b998d4d5e5d77f7f70b470a175a680a5ed2eb8282dba2cd09dafe5d28",
+    "status_code": "200",
+    "transaction_id": "284c3eeb-a157-4b23-8b30-eb5e692a524a",
+    "transaction_status": "settlement",
+    "fraud_status": "accept",
+    "expiry_time": "2024-06-18 14:59:24",
+    "settlement_time": "2024-06-18 14:44:42",
+    "status_message": "Success, transaction is found",
+    "merchant_id": "G537449506",
+    "transaction_type": "on-us",
+    "issuer": "gopay",
+    "acquirer": "gopay"
+}

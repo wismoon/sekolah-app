@@ -19,6 +19,8 @@ class Invoice {
   String? kodePos;
   String? negara;
   List<Map<String, dynamic>>? individu;
+  String? transactionStatus;
+  DateTime? created_at;
 
   Invoice(
       {this.id,
@@ -40,7 +42,9 @@ class Invoice {
       this.kota,
       this.kodePos,
       this.negara,
-      this.individu});
+      this.individu,
+      this.transactionStatus,
+      this.created_at});
 
   Invoice.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +69,8 @@ class Invoice {
     if (json['individu'] != null) {
       individu = List<Map<String, dynamic>>.from(json['individu']);
     }
+    transactionStatus = json['transactionStatus'];
+    created_at = DateTime.parse(json['created_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +97,8 @@ class Invoice {
     if (individu != null) {
       data['individu'] = individu;
     }
+    data['transactionStatus'] = transactionStatus;
+    data['created_at'] = created_at;
     return data;
   }
 }

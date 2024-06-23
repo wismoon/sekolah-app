@@ -22,7 +22,6 @@ class TagihanIndividuController extends GetxController {
 
   var invoicePembayaranList = <Invoice>[].obs;
 
-  var isBusy = false.obs;
   var isLoading = false.obs;
 
   @override

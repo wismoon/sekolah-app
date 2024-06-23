@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-
     final box = GetStorage();
     if (box.read("rememberme") != null) {
       controller.emailController.text = box.read("rememberme")["email"];
       controller.passwordController.text = box.read("rememberme")["password"];
-      controller.rememberme.value =  true;
+      controller.rememberme.value = true;
     }
     return Scaffold(
         appBar: AppBar(
@@ -27,6 +27,11 @@ class LoginView extends GetView<LoginController> {
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: [
+              SizedBox(
+                height: 200, // Adjust the height as needed
+                child: _buildLottie("Animation_login.json")// Replace with your Lottie file
+              ),
+              const SizedBox(height: 100,),
               TextField(
                 autocorrect: false,
                 controller: controller.emailController,
@@ -90,5 +95,10 @@ class LoginView extends GetView<LoginController> {
             ],
           ),
         ));
+  }
+
+  _buildLottie(String lottieName, [double width = 310]) {
+    return Lottie.asset('images/lottie/$lottieName',
+        width: width, fit: BoxFit.cover);
   }
 }

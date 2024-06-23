@@ -22,7 +22,9 @@ abstract class Routes {
   static const EDIT_Periode_PEMBAYARAN = _Paths.EDIT_Periode_PEMBAYARAN;
   static const AUTH_USERS = _Paths.AUTH_USERS;
   static const TAGIHAN = _Paths.TAGIHAN;
+  static const STUDEN_TAGIHAN = _Paths.STUDENT_TAGIHAN;
   static const PAYMENT = _Paths.PAYMENT;
+  static const PAYMENT_METHOD = _Paths.PAYMENT_METHOD;
   static const ADD_TAGIHAN_INDIVIDU = _Paths.ADD_TAGIHAN_INDIVIDU;
   static const EDIT_TAGIHAN_INDIVIDU = _Paths.EDIT_TAGIHAN_INDIVIDU;
   static const ADD_TAGIHAN_KELOMPOK = _Paths.ADD_TAGIHAN_KELOMPOK;
@@ -50,7 +52,9 @@ abstract class _Paths {
   static const EDIT_Periode_PEMBAYARAN = '/edit_periode_pembayaran';
   static const AUTH_USERS = '/auth-users';
   static const TAGIHAN = '/tagihan';
+  static const STUDENT_TAGIHAN = '/student_tagihan';
   static const PAYMENT = '/payment';
+  static const PAYMENT_METHOD = '/payment_method';
   static const ADD_TAGIHAN_INDIVIDU = '/add_tagihan_individu';
   static const EDIT_TAGIHAN_INDIVIDU = '/edit_tagihan_individu';
   static const ADD_TAGIHAN_KELOMPOK = '/add_tagihan_kelompok';

@@ -98,7 +98,7 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
           SizedBox(
             width: fieldWidth,
             child: ElevatedButton(
-              onPressed: controller.isBusy.value
+              onPressed: controller.isLoading.value
                   ? null
                   : () {
                       String? emptyField = _validateFields();
@@ -120,7 +120,7 @@ class AddJenisPembayaranView extends GetView<JenisPembayaranController> {
                         );
                       }
                     },
-              child: Text(controller.isLoading.isFalse ? "Loading" : "Tambah"),
+              child: Text(controller.isLoading.isFalse ? "Tambah" : "Loading"),
             ),
           ),
         ],

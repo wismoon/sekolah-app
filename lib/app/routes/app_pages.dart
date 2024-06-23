@@ -3,6 +3,7 @@ import 'package:sekolah_app/app/modules/authUsers/views/student_profile_view.dar
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_individu_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_kelompok_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/payment_view.dart';
+import 'package:sekolah_app/app/modules/tagihan/views/student_tagihan_view.dart';
 
 import '../modules/authUsers/bindings/auth_users_binding.dart';
 import '../modules/authUsers/views/auth_users_view.dart';
@@ -129,6 +130,11 @@ class AppPages {
       name: _Paths.TAGIHAN,
       page: () => const TagihanView(),
       binding: TagihanBinding(),
+    ),
+    GetPage(
+      name: _Paths.STUDENT_TAGIHAN,
+      page: () => const StudentTagihanView(),
+      binding: HomeBinding(),
     ),
     GetPage(
       name: _Paths.PAYMENT,

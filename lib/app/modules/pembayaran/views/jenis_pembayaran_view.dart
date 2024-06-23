@@ -29,7 +29,7 @@ class JenisPembayaranView extends GetView<JenisPembayaranController> {
                   controller.selectedFilter.value = newValue!;
                   controller.filterPembayaranList(); // Trigger filtering
                 },
-                items: <String>['All', 'REGULAR', 'NON-REGULAR']
+                items: <String>['All', 'REGULAR', 'NON REGULAR']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

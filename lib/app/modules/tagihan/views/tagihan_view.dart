@@ -16,24 +16,74 @@ class TagihanView extends GetView<TagihanController> {
         centerTitle: true,
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (controller.tagihanList.isEmpty) {
-          return Center(child: Text("No tagihan data available"));
-        }
-        return ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: controller.tagihanList.length,
-          itemBuilder: (context, index) {
-            final tagihan = controller.tagihanList[index];
-            return InvoiceCard(invoice: tagihan);
-          },
+        return PageView(
+          controller: controller.pageController,
+          onPageChanged: controller.onPageChanged,
+          children: [
+            _buildTagihanList(),
+            // _buildHistoryList(),
+          ],
         );
       }),
+      bottomNavigationBar: Obx(() {
+        return BottomNavigationBar(
+          currentIndex: controller.selectedIndex.value,
+          onTap: controller.onBottomNavTap,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.receipt),
+              label: 'New Invoice',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'History',
+            ),
+          ],
+        );
+      }),
+
       floatingActionButton: Obx(() => _buildFloatActionButton()),
     );
   }
+
+  Widget _buildTagihanList() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (controller.tagihanList.isEmpty) {
+        return Center(child: Text("No tagihan data available"));
+      }
+      return ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: controller.tagihanList.length,
+        itemBuilder: (context, index) {
+          final tagihan = controller.tagihanList[index];
+          final transactions= controller.transactionList;
+          return InvoiceCard(invoice: tagihan, statusTransactions: transactions,);
+        },
+      );
+    });
+  }
+
+  // Widget _buildHistoryList() {
+  //   return Obx(() {
+  //     if (controller.isLoading.value) {
+  //       return Center(child: CircularProgressIndicator());
+  //     }
+  //     if (controller.historyList.isEmpty) {
+  //       return Center(child: Text("No history data available"));
+  //     }
+  //     return ListView.builder(
+  //       padding: EdgeInsets.all(16),
+  //       itemCount: controller.historyList.length,
+  //       itemBuilder: (context, index) {
+  //         final history = controller.historyList[index];
+  //         return InvoiceCard(invoice: history);
+  //       },
+  //     );
+  //   });
+  // }
 
   Widget _buildFloatActionButton() {
     return Stack(

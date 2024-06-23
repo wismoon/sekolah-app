@@ -24,16 +24,26 @@ class PembayaranCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Kode  : ${pembayaran.kode ?? ''}"),
-              SizedBox(height: 8),
-              Text("Nama  : ${pembayaran.nama ?? ''}"),
-              SizedBox(height: 8),
-              Text("Jenis : ${pembayaran.pembayaran ?? ''}"),
-              SizedBox(height: 8),
+              _buildRow("Kode", pembayaran.kode ?? ''),
+              _buildRow("Nama Pembayaran", pembayaran.nama ?? ''),
+              _buildRow("Jenis Pembayaran", pembayaran.pembayaran ?? ''),
             ],
           ),
         ),
       ),
     );
   }
+  
+  Widget _buildRow (String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text("$label: ", style: TextStyle(fontWeight: FontWeight.bold)),
+          Expanded(child: Text(value))
+        ],
+      ),
+    );
+  }
+
 }

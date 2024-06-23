@@ -18,7 +18,6 @@ class JenisPembayaranController extends GetxController {
   var filteredPembayaranList = <JenisPembayaran>[].obs;
   var selectedFilter = 'All'.obs;
 
-  var isBusy = false.obs;
   var isLoading = false.obs;
 
   @override
@@ -90,8 +89,8 @@ class JenisPembayaranController extends GetxController {
   }
 
   void updateJenisPembayaran(int id, String? id_akun) async {
+    isLoading(true);
     try {
-      isBusy(true);
       print('Updating jenis pembayaran with ID: $id and id_akun: $id_akun');
       JenisPembayaran jenisPembayaran = JenisPembayaran(
         id: id,
@@ -121,13 +120,13 @@ class JenisPembayaranController extends GetxController {
         colorText: Colors.white,
       );
     } finally {
-      isBusy(false);
+      isLoading(false);
     }
     fetchJenisPembayaran();
   }
 
   void createJenisPembayaran(JenisPembayaran jenisPembayaran) async {
-    isBusy.value = true;
+    isLoading(true);
     try {
       await _service.createJenisPembayaran(jenisPembayaran);
       print('Jenis Pembayaran created successfully');
@@ -150,13 +149,13 @@ class JenisPembayaranController extends GetxController {
         colorText: Colors.white,
       );
     } finally {
-      isBusy.value = false;
+      isLoading(false);
     }
     fetchJenisPembayaran();
   }
 
   void deleteJenisPembayaran(int id) async {
-    isBusy(true);
+    isLoading(true);
     try {
       await _service.deleteJenisPembayaran(id);
       Get.snackbar(
@@ -173,7 +172,7 @@ class JenisPembayaranController extends GetxController {
         colorText: Colors.white,
       );
     } finally {
-      isBusy(false);
+      isLoading(false);
     }
     fetchJenisPembayaran();
   }

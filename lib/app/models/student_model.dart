@@ -87,6 +87,7 @@ class Student {
     data['negara'] = negara;
     return data;
   }
+  
   factory Student.fromDocumentSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Student(

@@ -12,6 +12,10 @@ class StudentProfileView extends GetView<StudentProfileController> {
       appBar: AppBar(
         title: const Text('Student Profile'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () => controller.logout(), icon: Icon(Icons.logout))
+        ],
       ),
       body: FutureBuilder<Map<String, dynamic>?>(
         future: controller.getProfile(),

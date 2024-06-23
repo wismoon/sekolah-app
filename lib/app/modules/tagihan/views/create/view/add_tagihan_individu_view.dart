@@ -198,13 +198,6 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
                     width: 3.0,
                   ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                    width: 3.0,
-                  ),
-                ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide(
@@ -219,13 +212,13 @@ class AddTagihanIndividuView extends GetView<TagihanIndividuController> {
             SizedBox(height: 20),
             ElevatedButton(
                 onPressed: controller.isLoading.value
-                    ? () {
+                    ? null 
+                    : () {
                         controller.createInvoicePembayaran();
                         Navigator.pop(context);
-                      }
-                    : null,
+                      },
                 child:
-                    Text(controller.isLoading.isFalse ? "Loading" : "Tambah")),
+                    Text(controller.isLoading.isFalse ? "Tambah" : "Loading")),
           ],
         ));
   }
