@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 
 class BiayaPembayaranCard extends StatelessWidget {
@@ -26,7 +27,7 @@ class BiayaPembayaranCard extends StatelessWidget {
             children: [
               _buildRow("Nama Pembayaran", pembayaran.nama ?? ''),
               _buildRow("Jenis Pembayaran", pembayaran.jenis ?? ''),
-              _buildRow("Biaya Pembayaran", pembayaran.biaya ?? ''),
+              _buildRow("Biaya Pembayaran",  _formatCurrency(pembayaran.biaya ?? '')),
             ],
           ),
         ),
@@ -44,5 +45,11 @@ class BiayaPembayaranCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatCurrency(String amount) {
+    final formatter =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatter.format(int.parse(amount));
   }
 }

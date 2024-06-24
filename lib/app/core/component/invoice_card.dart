@@ -25,6 +25,8 @@ class InvoiceCard extends StatelessWidget {
 
     String transactionStatus = matchingTransaction.transactionStatus ?? 'Pending';
 
+    print('Invoice: ${invoice.nomor_pembayaran}, Expected Order ID: $expectedOrderId, Status: $transactionStatus');
+
     return GestureDetector(
       onTap: () {
         showFullScreenInvoiceDetailSheet(context, invoice);
@@ -41,7 +43,6 @@ class InvoiceCard extends StatelessWidget {
             _buildRow("Nama Pembayaran", invoice.nama_pembayaran!),
             _buildRow("Biaya Pembayaran", _formatCurrency(invoice.biaya_pembayaran!)),
             _buildRow("Keterangan", _truncateKeterangan(invoice.keterangan!)),
-            SizedBox(height: 10,),
             _buildStatusRow("Status Transaksi", transactionStatus, transactionStatus)
           ],
         ),
@@ -94,7 +95,7 @@ class InvoiceCard extends StatelessWidget {
         Text("$label: ", style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(width: 8),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
           decoration: BoxDecoration(
             color: statusColor,
             borderRadius: BorderRadius.circular(8)

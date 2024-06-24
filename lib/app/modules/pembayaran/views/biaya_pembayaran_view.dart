@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/biayapembayaran_model.dart';
 import 'package:sekolah_app/app/modules/pembayaran/controllers/biaya_pembayaran_controller.dart';
@@ -68,17 +69,21 @@ class BiayaPembayaranView extends GetView<BiayaPembayaranController> {
             padding: const EdgeInsets.all(16.0),
             width: MediaQuery.of(context).size.width,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('No: ${pembayaran.id.toString()}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran.nama}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran.jenis}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Biaya Pembayaran: ${pembayaran.biaya}',
-                    style: TextStyle(fontSize: 20)),
-                const SizedBox(height: 20),
+                Container(
+                  width: 50,
+                  height: 5,
+                  margin: EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(2.5),
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                _buildDetailRow('Nama Pembayaran', pembayaran.nama!),
+                _buildDetailRow('Jenis Pembayaran', pembayaran.jenis!),
+                _buildDetailRow('Biaya Pembayaran', _formatCurrency(pembayaran.biaya!)),
                 Spacer(), // Push the buttons to the bottom
                 Center(
                   child: Column(
@@ -141,6 +146,25 @@ class BiayaPembayaranView extends GetView<BiayaPembayaranController> {
     );
   }
 
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$label :",
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showDeleteConfirmation(
       BuildContext context, Biayapembayaran pembayaran) {
     showDialog(
@@ -176,5 +200,11 @@ class BiayaPembayaranView extends GetView<BiayaPembayaranController> {
         );
       },
     );
+  }
+
+  String _formatCurrency(String amount) {
+    final formatter =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatter.format(int.parse(amount));
   }
 }

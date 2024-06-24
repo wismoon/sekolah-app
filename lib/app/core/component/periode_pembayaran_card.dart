@@ -25,10 +25,7 @@ class PeriodePembayaranCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildRow("Nama Pembayaran", pembayaran.nama ?? ''),
-              Text(
-                "Jenis Pembayaran: ${pembayaran.jenis ?? ''}",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              _buildRow("Periode Pembayaran", pembayaran.jenis ?? ''),
             ],
           ),
         ),
@@ -36,13 +33,21 @@ class PeriodePembayaranCard extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(String label, String value) {
+  Widget _buildRow(String label, dynamic value) {
+    String displayValue;
+    if (value is List<String>) {
+      // Join the list into a single string with comma and space
+      displayValue = value.join(', ');
+    } else {
+      // Otherwise, use value directly as string
+      displayValue = value.toString();
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Text("$label: ", style: TextStyle(fontWeight: FontWeight.bold)),
-          Expanded(child: Text(value))
+          Expanded(child: Text(displayValue)),
         ],
       ),
     );

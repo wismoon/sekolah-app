@@ -86,15 +86,21 @@ class JenisPembayaranView extends GetView<JenisPembayaranController> {
             padding: const EdgeInsets.all(16.0),
             width: MediaQuery.of(context).size.width,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('Kode: ${pembayaran.kode}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Nama Pembayaran: ${pembayaran.nama}',
-                    style: TextStyle(fontSize: 20)),
-                Text('Jenis Pembayaran: ${pembayaran.pembayaran}',
-                    style: TextStyle(fontSize: 20)),
-                const SizedBox(height: 20),
+                Container(
+                  width: 50,
+                  height: 5,
+                  margin: EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(2.5),
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                _buildDetailRow("Kode Pembayaran", pembayaran.kode!),
+                _buildDetailRow("Nama Pembayaran", pembayaran.nama!),
+                _buildDetailRow("Jenis Pembayaran", pembayaran.pembayaran!),
                 Spacer(),
                 Center(
                   child: Column(
@@ -155,6 +161,25 @@ class JenisPembayaranView extends GetView<JenisPembayaranController> {
           ),
         );
       },
+    );
+  }
+  
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$label :",
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      ),
     );
   }
 
