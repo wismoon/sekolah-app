@@ -40,7 +40,7 @@ class InvoiceDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd MMM yyyy, HH:mm:ss').format(invoice.created_at!);
+    String formattedDate = DateFormat('dd MMM yyyy, HH:mm:ss').format(invoice.created_at!.toLocal());
     return Container(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -94,7 +94,10 @@ class InvoiceDetailSheet extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: _handlePayment,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _handlePayment();
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 15),
                     ),

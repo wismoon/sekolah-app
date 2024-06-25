@@ -40,9 +40,6 @@ class InvoiceCardSiswa extends StatelessWidget {
                     _formatCurrency(invoice.biaya_pembayaran!)),
                 _buildRow(
                     "Keterangan", _truncateKeterangan(invoice.keterangan!)),
-                SizedBox(
-                  height: 10,
-                ),
                 _buildStatusRow("Status Transaksi", transactionStatus, transactionStatus)
               ],
             ),

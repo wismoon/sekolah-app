@@ -111,10 +111,10 @@ class StudentHomeController extends GetxController {
 
       await storeTransactionDetails(statusResponse['data']);
 
-      Get.snackbar('Payment Status', 'Status: ${statusResponse['transaction_status']}');
+      // Get.snackbar('Payment Status', 'Status: ${statusResponse['transaction_status']}');
       return statusResponse;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to get payment status: $e');
+      // Get.snackbar('Error', 'Failed to get payment status: $e');
       return {};
     }
   }
@@ -161,9 +161,7 @@ class StudentHomeController extends GetxController {
 
           // Show success message using GetX's snackbar
           Get.snackbar('Success', 'Transaction details stored in Firestore');
-        } else {
-          Get.snackbar('Info', 'Transaction already exists');
-        }
+        } 
       } else {
         // Show error message if user is not logged in
         Get.snackbar('Error', 'User is not logged in');

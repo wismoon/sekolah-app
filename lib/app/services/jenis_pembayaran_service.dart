@@ -53,11 +53,9 @@ class JenisPembayaranService {
     }
   }
 
-  Future<void> updateJenisPembayaran(JenisPembayaran jenisPembayaran, String? id_akun) async {
+  Future<void> updateJenisPembayaran(JenisPembayaran jenisPembayaran) async {
     final baseUrl = Uri.parse(
-        '${BaseUrlConstants.baseUrl}${TransaksiEndpoints.jenisPembayaran}/${jenisPembayaran.id}?id_akun=$id_akun');
-    final url = id_akun != null;
-    print(url);
+        '${BaseUrlConstants.baseUrl}${TransaksiEndpoints.jenisPembayaran}/${jenisPembayaran.id}');
 
     final payload = jsonEncode(jenisPembayaran.toJson());
     print('Payload: $payload');

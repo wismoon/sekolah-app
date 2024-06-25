@@ -118,9 +118,7 @@ class EditJenisPembayaranView extends GetView<JenisPembayaranController> {
                     onPressed: () {
                       try {
                         controller.updateJenisPembayaran(
-                            arguments['id'],
-                            arguments[
-                                'id_akun']); // Pass the ID to the update method
+                            arguments['id']); // Pass the ID to the update method
                         Get.back();
                       } catch (e) {
                         Get.snackbar(

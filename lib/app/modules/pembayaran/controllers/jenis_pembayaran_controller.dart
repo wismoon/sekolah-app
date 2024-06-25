@@ -62,7 +62,7 @@ class JenisPembayaranController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error',
-        'An error occurred: $e',
+        'Gagal terhubung ke server',
         backgroundColor: AppColors.errorColor,
         colorText: Colors.white,
       );
@@ -88,13 +88,11 @@ class JenisPembayaranController extends GetxController {
     }
   }
 
-  void updateJenisPembayaran(int id, String? id_akun) async {
+  void updateJenisPembayaran(JenisPembayaran id) async {
     isLoading(true);
     try {
-      print('Updating jenis pembayaran with ID: $id and id_akun: $id_akun');
+      print('Updating jenis pembayaran with ID: $id');
       JenisPembayaran jenisPembayaran = JenisPembayaran(
-        id: id,
-        idAkun: id_akun,
         kode: kodeJenis.text,
         nama: nameJenis.text,
         pembayaran: pembayaranValue.value,
@@ -103,7 +101,7 @@ class JenisPembayaranController extends GetxController {
 
       print(
           'Data being sent for update: ${jsonEncode(jenisPembayaran.toJson())}');
-      await _service.updateJenisPembayaran(jenisPembayaran, id_akun);
+      await _service.updateJenisPembayaran(id);
 
       Get.snackbar(
         'Success',

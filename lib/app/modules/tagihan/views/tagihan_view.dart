@@ -14,76 +14,56 @@ class TagihanView extends GetView<TagihanController> {
       appBar: AppBar(
         title: const Text('Tagihan'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: InvoiceSearchDelegate(controller));
+            },
+          ),
+        ],
       ),
       body: Obx(() {
-        return PageView(
-          controller: controller.pageController,
-          onPageChanged: controller.onPageChanged,
-          children: [
-            _buildTagihanList(),
-            // _buildHistoryList(),
-          ],
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (controller.tagihanList.isEmpty) {
+          return Center(child: Text("No tagihan data available"));
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(16),
+          itemCount: controller.tagihanList.length,
+          itemBuilder: (context, index) {
+            final tagihan = controller.tagihanList[index];
+            final transactions = controller.transactionList;
+            return InvoiceCard(
+              invoice: tagihan,
+              statusTransactions: transactions,
+            );
+          },
         );
       }),
-      bottomNavigationBar: Obx(() {
-        return BottomNavigationBar(
-          currentIndex: controller.selectedIndex.value,
-          onTap: controller.onBottomNavTap,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt),
-              label: 'New Invoice',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'History',
-            ),
-          ],
-        );
-      }),
-
       floatingActionButton: Obx(() => _buildFloatActionButton()),
     );
   }
 
-  Widget _buildTagihanList() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (controller.tagihanList.isEmpty) {
-        return Center(child: Text("No tagihan data available"));
-      }
-      return ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: controller.tagihanList.length,
-        itemBuilder: (context, index) {
-          final tagihan = controller.tagihanList[index];
-          final transactions= controller.transactionList;
-          return InvoiceCard(invoice: tagihan, statusTransactions: transactions,);
-        },
-      );
-    });
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: controller.searchInvoice,
+        decoration: InputDecoration(
+          hintText: 'Search Invoices',
+          prefixIcon: Icon(Icons.search),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+        ),
+      ),
+    );
   }
-
-  // Widget _buildHistoryList() {
-  //   return Obx(() {
-  //     if (controller.isLoading.value) {
-  //       return Center(child: CircularProgressIndicator());
-  //     }
-  //     if (controller.historyList.isEmpty) {
-  //       return Center(child: Text("No history data available"));
-  //     }
-  //     return ListView.builder(
-  //       padding: EdgeInsets.all(16),
-  //       itemCount: controller.historyList.length,
-  //       itemBuilder: (context, index) {
-  //         final history = controller.historyList[index];
-  //         return InvoiceCard(invoice: history);
-  //       },
-  //     );
-  //   });
-  // }
 
   Widget _buildFloatActionButton() {
     return Stack(
@@ -127,5 +107,59 @@ class TagihanView extends GetView<TagihanController> {
         ),
       ],
     );
+  }
+}
+
+class InvoiceSearchDelegate extends SearchDelegate<String> {
+  final TagihanController controller;
+
+  InvoiceSearchDelegate(this.controller);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    controller.searchInvoice(query);
+    return Obx(() {
+      if (controller.filteredTagihanList.isEmpty) {
+        return Center(child: Text("No results found"));
+      }
+      return ListView.builder(
+        itemCount: controller.filteredTagihanList.length,
+        itemBuilder: (context, index) {
+          final tagihan = controller.filteredTagihanList[index];
+          final transactions = controller.transactionList;
+          return InvoiceCard(
+            invoice: tagihan,
+            statusTransactions: transactions,
+          );
+        },
+      );
+    });
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container(); // Suggestions not implemented in this example
   }
 }

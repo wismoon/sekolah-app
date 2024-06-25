@@ -88,10 +88,10 @@ class LoginView extends GetView<LoginController> {
                   },
                   child: Text(
                       controller.isLoading.isFalse ? "Masuk" : "Loading"))),
-              TextButton(
-                onPressed: () => Get.toNamed(Routes.REGISTER),
-                child: Text("Daftar"),
-              )
+              // TextButton(
+              //   onPressed: () => Get.toNamed(Routes.REGISTER),
+              //   child: Text("Daftar"),
+              // )
             ],
           ),
         ));

@@ -25,7 +25,7 @@ class InvoiceCard extends StatelessWidget {
 
     String transactionStatus = matchingTransaction.transactionStatus ?? 'Pending';
 
-    print('Invoice: ${invoice.nomor_pembayaran}, Expected Order ID: $expectedOrderId, Status: $transactionStatus');
+    // print('Invoice: ${invoice.nomor_pembayaran}, Expected Order ID: $expectedOrderId, Status: $transactionStatus');
 
     return GestureDetector(
       onTap: () {
@@ -71,11 +71,11 @@ class InvoiceCard extends StatelessWidget {
         statusColor = Colors.green;
         statusText = "Sudah Bayar";
         break;
-      case "canceled":
+      case "cancel":
         statusColor = Colors.red;
         statusText = "Dibatalkan";
         break;
-      case "captured":
+      case "capture":
         statusColor = Colors.blue;
         statusText = "Diterima";
         break;
