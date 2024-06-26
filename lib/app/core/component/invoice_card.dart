@@ -29,7 +29,7 @@ class InvoiceCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        showFullScreenInvoiceDetailSheet(context, invoice);
+        showFullScreenInvoiceDetailSheet(context, invoice, transactionStatus);
       },
       child: Card(
       margin: EdgeInsets.symmetric(vertical: 10),

@@ -60,7 +60,7 @@ class BiayaPembayaranController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error',
-        'An error occurred: $e',
+        'Gagal terhubung ke server',
         backgroundColor: AppColors.errorColor,
         colorText: Colors.white,
       );

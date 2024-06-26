@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sekolah_app/app/modules/authUsers/views/student_profile_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_individu_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/create/view/add_tagihan_kelompok_view.dart';
+import 'package:sekolah_app/app/modules/tagihan/views/payment_method_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/payment_view.dart';
 import 'package:sekolah_app/app/modules/tagihan/views/student_tagihan_view.dart';
 
@@ -139,6 +140,11 @@ class AppPages {
     GetPage(
       name: _Paths.PAYMENT,
       page: () => PaymentView(url: Get.parameters['url'] ?? ''),
+      binding: TagihanBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_METHOD,
+      page: () => PaymentMethodView(),
       binding: TagihanBinding(),
     ),
     GetPage(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:sekolah_app/app/models/transaction_model.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
@@ -13,10 +14,12 @@ class StudentHomeController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final InvoiceService _service = InvoiceService();
   var invoiceList = <Invoice>[].obs;
+  var filteredTagihanList = <Invoice>[].obs;
   var transactionList = <SiswaTransaction>[].obs;
   var isLoading = false.obs;
   var userNim = ''.obs;
   var selectedIndex = 0.obs;
+  var searchQuery = ''.obs;
   PageController pageController = PageController();
 
   @override
@@ -30,19 +33,35 @@ class StudentHomeController extends GetxController {
       isLoading(true);
       String uid = auth.currentUser?.uid ?? '';
       if (uid.isNotEmpty) {
-        DocumentSnapshot userDoc = await firestore.collection('siswa').doc(uid).get();
+        DocumentSnapshot userDoc =
+            await firestore.collection('siswa').doc(uid).get();
         if (userDoc.exists) {
           userNim.value = userDoc['nim'];
           fetchStudentInvoice(userNim.value);
           fetchTransactions(uid);
         } else {
-          Get.snackbar('Error', 'User data not found');
+          Get.snackbar(
+            'Error',
+            'User data not found',
+            backgroundColor: AppColors.errorColor,
+            colorText: Colors.white,
+          );
         }
       } else {
-        Get.snackbar('Error', 'User is not logged in');
+        Get.snackbar(
+          'Error',
+          'User is not logged in',
+          backgroundColor: AppColors.errorColor,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch user data: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to fetch user data: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -53,18 +72,29 @@ class StudentHomeController extends GetxController {
       isLoading(true);
       var studentInvoices = await _service.fetchStudentInvoice(nim);
       if (studentInvoices.isEmpty) {
-        Get.snackbar('Data Error', 'Failed to load data because it is empty');
+        Get.snackbar(
+          'Data Error',
+          'Failed to load data because it is empty',
+          backgroundColor: AppColors.errorColor,
+          colorText: Colors.white,
+        );
       } else {
         invoiceList.value = studentInvoices;
 
         // Check the payment status for each invoice and update the status
         for (var invoice in invoiceList) {
-          var statusResponse = await checkPaymentStatus(invoice.nomor_pembayaran! + '-1');
+          var statusResponse =
+              await checkPaymentStatus(invoice.nomor_pembayaran! + '-1');
           invoice.transactionStatus = statusResponse['transaction_status'];
         }
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal Terhubung ke server',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -83,7 +113,12 @@ class StudentHomeController extends GetxController {
           .map((doc) => SiswaTransaction.fromDocumentSnapshot(doc))
           .toList();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch transactions: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to fetch transactions: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading(false);
     }
@@ -93,7 +128,8 @@ class StudentHomeController extends GetxController {
     isLoading.value = true;
     try {
       final response = await PaymentService.createPayment(nomorPembayaran);
-      final transactionStatus = await checkPaymentStatus(nomorPembayaran + '-1');
+      final transactionStatus =
+          await checkPaymentStatus(nomorPembayaran + '-1');
       await storeTransactionDetails(transactionStatus);
 
       return response;
@@ -107,7 +143,8 @@ class StudentHomeController extends GetxController {
 
   Future<Map<String, dynamic>> checkPaymentStatus(String transactionId) async {
     try {
-      Map<String, dynamic> statusResponse = await PaymentService.getPaymentStatus(transactionId);
+      Map<String, dynamic> statusResponse =
+          await PaymentService.getPaymentStatus(transactionId);
 
       await storeTransactionDetails(statusResponse['data']);
 
@@ -119,7 +156,8 @@ class StudentHomeController extends GetxController {
     }
   }
 
-  Future<void> storeTransactionDetails(Map<String, dynamic> transactionData) async {
+  Future<void> storeTransactionDetails(
+      Map<String, dynamic> transactionData) async {
     try {
       String uid = auth.currentUser?.uid ?? '';
       if (uid.isNotEmpty) {
@@ -160,14 +198,45 @@ class StudentHomeController extends GetxController {
               .add(dataToStore);
 
           // Show success message using GetX's snackbar
-          Get.snackbar('Success', 'Transaction details stored in Firestore');
-        } 
+          Get.snackbar(
+            'Success',
+            'Transaction details stored in Firestore',
+            backgroundColor: AppColors.successColor,
+            colorText: Colors.white,
+          );
+        }
       } else {
         // Show error message if user is not logged in
         Get.snackbar('Error', 'User is not logged in');
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to store transaction details: $e');
+    }
+  }
+
+  void searchInvoice(String query) {
+    if (query.isEmpty) {
+      filteredTagihanList.assignAll(invoiceList);
+    } else {
+      filteredTagihanList.assignAll(invoiceList.where((invoice) =>
+          (invoice.nama != null &&
+              invoice.nama!.toLowerCase().contains(query.toLowerCase())) ||
+          (invoice.transactionStatus != null &&
+              invoice.transactionStatus!
+                  .toLowerCase()
+                  .contains(query.toLowerCase())) ||
+          (invoice.nama_pembayaran != null &&
+              invoice.nama_pembayaran!
+                  .toLowerCase()
+                  .contains(query.toLowerCase())) ||
+          (invoice.nama_pembayaran != null &&
+              invoice.nama_pembayaran!
+                  .toLowerCase()
+                  .contains(query.toLowerCase())) ||
+          (invoice.jenis_pembayaran != null &&
+              invoice.jenis_pembayaran!
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))));
     }
   }
 

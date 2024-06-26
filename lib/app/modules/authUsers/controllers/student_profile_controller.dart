@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sekolah_app/app/core/constant/color.dart';
 import 'package:sekolah_app/app/routes/app_pages.dart';
 
 class StudentProfileController extends GetxController {
@@ -79,7 +80,9 @@ class StudentProfileController extends GetxController {
         }
 
         isLoading.value = false;
-        succMsg("Berhasil update data");
+        succMsg(
+          "Berhasil update data",
+        );
       } catch (e) {
         isLoading.value = false;
         errMsg("Tidak dapat mengubah data");
@@ -94,6 +97,11 @@ class StudentProfileController extends GetxController {
   }
 
   void succMsg(String msg) {
-    Get.snackbar("Berhasil", msg);
+    Get.snackbar(
+      "Berhasil",
+      msg,
+      backgroundColor: AppColors.successColor,
+      colorText: Colors.white,
+    );
   }
 }

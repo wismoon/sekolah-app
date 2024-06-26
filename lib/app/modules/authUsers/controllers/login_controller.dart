@@ -110,7 +110,11 @@ class LoginController extends GetxController {
                     await credential.user!.sendEmailVerification();
                     Get.back();
                     Get.snackbar(
-                        "Terkirim", "Email Verifikasi Berhasil Terkirim");
+                      "Terkirim",
+                      "Email Verifikasi Berhasil Terkirim",
+                      backgroundColor: AppColors.successColor,
+                      colorText: Colors.white,
+                    );
                   } catch (e) {
                     print(e);
                     Get.back();
