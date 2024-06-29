@@ -14,6 +14,7 @@ class TagihanKelompokController extends GetxController {
   var selectedBiaya = ''.obs;
   var commentJenis = TextEditingController();
   var selectedTahunAngkatan = ''.obs;
+  var selectedJurusan = ''.obs;
   var students = <Student>[].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -49,11 +50,10 @@ class TagihanKelompokController extends GetxController {
     }
   }
 
-  void createInvoiceBulkPembayaran(String tahunAngkatan) async {
+  void createInvoiceBulkPembayaran(String tahunAngkatan, String? jurusan) async {
     print("Selected Tahun Angkatan: $tahunAngkatan");
     final filteredStudents = students
-        .where((student) => student.tahunAngkatan == tahunAngkatan)
-        .toList();
+        .where((student) => student.tahunAngkatan == tahunAngkatan && (jurusan == null || jurusan.isEmpty || student.jurusan == jurusan)).toList();
     print("Filtered Students: ${filteredStudents.length}");
 
     if (filteredStudents.isEmpty) {

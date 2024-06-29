@@ -40,12 +40,12 @@ class StudentHomeController extends GetxController {
           fetchStudentInvoice(userNim.value);
           fetchTransactions(uid);
         } else {
-          Get.snackbar(
-            'Error',
-            'User data not found',
-            backgroundColor: AppColors.errorColor,
-            colorText: Colors.white,
-          );
+          // Get.snackbar(
+          //   'Error',
+          //   'User data not found',
+          //   backgroundColor: AppColors.errorColor,
+          //   colorText: Colors.white,
+          // );
         }
       } else {
         Get.snackbar(
@@ -240,6 +240,26 @@ class StudentHomeController extends GetxController {
     }
   }
 
+  void logout() async {
+    try {
+      await auth.signOut();
+      Get.offAllNamed(Routes.LOGIN);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onBottomNavTap(int index) {
+    selectedIndex.value = index;
+    pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int index) {
+    selectedIndex.value = index;
+  }
+}
+
+
   // void fetchUserData() async {
   //   try {
   //     isLoading(true); // Show loading indicator
@@ -384,22 +404,3 @@ class StudentHomeController extends GetxController {
   //     Get.snackbar('Error', 'Failed to store transaction details: $e');
   //   }
   // }
-
-  void logout() async {
-    try {
-      await auth.signOut();
-      Get.offAllNamed(Routes.LOGIN);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void onBottomNavTap(int index) {
-    selectedIndex.value = index;
-    pageController.jumpToPage(index);
-  }
-
-  void onPageChanged(int index) {
-    selectedIndex.value = index;
-  }
-}

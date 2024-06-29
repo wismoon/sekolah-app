@@ -7,7 +7,7 @@ import 'package:printing/printing.dart';
 import 'package:sekolah_app/app/core/component/pdf_invoice_generator.dart';
 import 'package:sekolah_app/app/models/invoice_model.dart';
 import 'package:sekolah_app/app/modules/home/controllers/student_home_controller.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class InvoiceDetailSheet2 extends StatelessWidget {
   final Invoice invoice;
@@ -16,27 +16,26 @@ class InvoiceDetailSheet2 extends StatelessWidget {
       Get.put(StudentHomeController());
   InvoiceDetailSheet2({Key? key, required this.invoice, required this.transactionStatus}) : super(key: key);
 
-  void _handleShare() {
-    final StringBuffer buffer = StringBuffer();
-    buffer.writeln('Invoice Details:');
-    buffer.writeln('No Pembayaran: ${invoice.nomor_pembayaran}');
-    buffer.writeln('Status Transaksi: ${transactionStatus}');
-    buffer.writeln('Jenis Pembayaran: ${invoice.jenis_pembayaran}');
-    buffer.writeln('Nama Pembayaran: ${invoice.nama_pembayaran}');
-    buffer.writeln(
-        'Biaya Pembayaran: ${_formatCurrency(invoice.biaya_pembayaran!)}');
-    buffer.writeln(
-        'Keterangan: ${_truncateKeterangan(invoice.keterangan ?? "-")}');
-    buffer.writeln(
-        'Waktu dan Tanggal: ${DateFormat('dd MMM yyyy, HH:mm:ss').format(invoice.created_at!.toLocal())}');
-    buffer.writeln('Total: ${_formatCurrency(invoice.biaya_pembayaran!)}');
+  void _handleShare() async {
+    final pdfGenerator = PdfInvoiceGenerator(
+      invoice: invoice,
+      transactionStatus: transactionStatus,
+    );
+    final pdfPath = await pdfGenerator.generateInvoice();
+    final pdfFile = XFile(pdfPath);
 
-    Share.share(buffer.toString(), subject: 'Invoice Details');
+    String additionalText = 'Invoice for ${invoice.nama}\n'
+        'Invoice Number: ${invoice.nomor_pembayaran}\n'
+        'Date: ${DateFormat('dd MMM yyyy, HH:mm:ss').format(invoice.created_at!.toLocal())}\n'
+        'Amount: ${invoice.biaya_pembayaran}';
+
+    Share.shareXFiles([pdfFile], text: additionalText);
   }
 
   void _handlePrint() async {
-    final pdfGenerator = PdfInvoiceGenerator(invoice: invoice, transactionStatus: transactionStatus);
-    final Uint8List pdf = await pdfGenerator.generateInvoice();
+    final pdfGenerator = PdfInvoiceGenerator(
+        invoice: invoice, transactionStatus: transactionStatus);
+    final Uint8List pdf = await pdfGenerator.generateInvoiceAsBytes();
     Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf);
   }
 

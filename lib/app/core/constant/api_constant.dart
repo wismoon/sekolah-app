@@ -1,5 +1,5 @@
 class BaseUrlConstants {
-  static const String baseUrl = 'http://192.168.1.15:3350/api';
+  static const String baseUrl = 'http://192.168.206.1:3350/api';
   static const String contentTypeJson = 'application/json; charset=UTF-8';
 }
 

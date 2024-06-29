@@ -69,6 +69,50 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
               );
             }),
             const SizedBox(height: 20),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              final jurusanList = controller.students
+                  .map((student) => student.jurusan ?? '')
+                  .toSet()
+                  .toList();
+              print("Available Jurusan: $jurusanList");
+
+              return DropdownSearch<String>(
+                items: jurusanList,
+                itemAsString: (String jurusan) => jurusan,
+                onChanged: (String? selectedJurusan) {
+                  if (selectedJurusan != null) {
+                    controller.selectedJurusan.value = selectedJurusan;
+                    print("Selected Jurusan: $selectedJurusan");
+                  }
+                },
+                popupProps: PopupProps.menu(
+                  showSearchBox: true,
+                  searchFieldProps: TextFieldProps(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Search Jurusan',
+                    ),
+                  ),
+                  title: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text('Jurusan', style: TextStyle(fontSize: 18.0)),
+                    ),
+                  ),
+                ),
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Select Jurusan',
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 20),
             Center(
               child: Obx(() => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +124,8 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          },width: fieldWidth / 2 - 12),
+                          },
+                          width: fieldWidth / 2 - 12),
                       const SizedBox(width: 16),
                       _buildRadioButton(
                           label: 'Non Semester',
@@ -89,7 +134,8 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                           onChanged: (String value) {
                             controller.selectedValue.value = value;
                             controller.selectedJenis.value = '';
-                          },width: fieldWidth / 2 - 12),
+                          },
+                          width: fieldWidth / 2 - 12),
                     ],
                   )),
             ),
@@ -232,7 +278,7 @@ class AddTagihanKelompokView extends GetView<TagihanKelompokController> {
                     ? null
                     : () {
                         controller.createInvoiceBulkPembayaran(
-                            controller.selectedTahunAngkatan.value);
+                            controller.selectedTahunAngkatan.value, controller.selectedJurusan.value);
                         Navigator.pop(context);
                       },
                 child:

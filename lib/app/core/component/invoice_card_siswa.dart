@@ -73,8 +73,8 @@ class InvoiceCardSiswa extends StatelessWidget {
         statusText = "Dibatalkan";
         break;
       case "capture":
-        statusColor = Colors.blue;
-        statusText = "Diterima";
+        statusColor = Colors.green;
+        statusText = "Sudah Bayar";
         break;
       case "expired":
         statusColor = Colors.grey;

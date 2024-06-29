@@ -23,54 +23,38 @@ class StudentTagihanView extends GetView<StudentHomeController> {
           ),
         ],
       ),
-      body: Obx(() {
-        return PageView(
+      body: PageView(
           controller: controller.pageController,
           onPageChanged: controller.onPageChanged,
           children: [
-            if (controller.invoiceList.isEmpty)
-              const Center(child: Text("No tagihan data available"))
-            else
-              ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: controller.invoiceList.length,
-                itemBuilder: (context, index) {
-                  final payment = controller.invoiceList[index];
-                  final transactions = controller.transactionList;
-                  return InvoiceCardSiswa(
-                    invoice: payment,
-                    statusTransactions: transactions,
-                  );
-                },
-              ),
+            _buildTagihanList()
           ],
-        );
-      }),
+        ),
     );
   }
 
-  // Widget _buildTagihanList() {
-  //   return Obx(() {
-  //     if (controller.isLoading.value) {
-  //       return Center(child: CircularProgressIndicator());
-  //     }
-  //     if (controller.invoiceList.isEmpty) {
-  //       return Center(child: Text("No tagihan data available"));
-  //     }
-  //     return ListView.builder(
-  //       padding: EdgeInsets.all(16),
-  //       itemCount: controller.invoiceList.length,
-  //       itemBuilder: (context, index) {
-  //         final payment = controller.invoiceList[index];
-  //         final transactions = controller.transactionList;
-  //         return InvoiceCardSiswa(
-  //           invoice: payment,
-  //           statusTransactions: transactions,
-  //         );
-  //       },
-  //     );
-  //   });
-  // }
+  Widget _buildTagihanList() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (controller.invoiceList.isEmpty) {
+        return Center(child: Text("No tagihan data available"));
+      }
+      return ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: controller.invoiceList.length,
+        itemBuilder: (context, index) {
+          final payment = controller.invoiceList.toList()[index];
+          final transactions = controller.transactionList.toList();
+          return InvoiceCardSiswa(
+            invoice: payment,
+            statusTransactions: transactions,
+          );
+        },
+      );
+    });
+  }
 
   Widget _buildSearchBar() {
     return Padding(
